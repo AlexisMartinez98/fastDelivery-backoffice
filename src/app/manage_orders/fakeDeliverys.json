@@ -5,6 +5,7 @@
       "repartidores": [
         {
           "nombre": "Repartidor 1",
+          "activo": true,
           "paquetes": [
             {
               "id": 1,
@@ -16,7 +17,7 @@
             },
             {
               "id": 3,
-              "entregado": false
+              "entregado": true
             },
             {
               "id": 4,
@@ -32,7 +33,7 @@
             },
             {
               "id": 7,
-              "entregado": false
+              "entregado": true
             },
             {
               "id": 8,
@@ -50,6 +51,7 @@
         },
         {
           "nombre": "Repartidor 2",
+          "activo": true,
           "paquetes": [
             {
               "id": 11,
@@ -65,7 +67,7 @@
             },
             {
               "id": 14,
-              "entregado": false
+              "entregado": true
             },
             {
               "id": 15,
@@ -77,7 +79,7 @@
             },
             {
               "id": 17,
-              "entregado": false
+              "entregado": true
             },
             {
               "id": 18,
@@ -95,6 +97,7 @@
         },
         {
           "nombre": "Repartidor 3",
+          "activo": true,
           "paquetes": [
             {
               "id": 21,
@@ -149,7 +152,7 @@
           "paquetes": [
             {
               "id": 1,
-              "entregado": true
+              "entregado": false
             },
             {
               "id": 2,
@@ -195,7 +198,7 @@
           "paquetes": [
             {
               "id": 11,
-              "entregado": true
+              "entregado": false
             },
             {
               "id": 12,
@@ -237,6 +240,52 @@
         },
         {
           "nombre": "Repartidor 3",
+          "activo": true,
+          "paquetes": [
+            {
+              "id": 21,
+              "entregado": false
+            },
+            {
+              "id": 22,
+              "entregado": false
+            },
+            {
+              "id": 23,
+              "entregado": true
+            },
+            {
+              "id": 24,
+              "entregado": false
+            },
+            {
+              "id": 25,
+              "entregado": true
+            },
+            {
+              "id": 26,
+              "entregado": true
+            },
+            {
+              "id": 27,
+              "entregado": true
+            },
+            {
+              "id": 28,
+              "entregado": false
+            },
+            {
+              "id": 29,
+              "entregado": true
+            },
+            {
+              "id": 30,
+              "entregado": true
+            }
+          ]
+        },
+        {
+          "nombre": "Repartidor 4",
           "activo": true,
           "paquetes": [
             {
