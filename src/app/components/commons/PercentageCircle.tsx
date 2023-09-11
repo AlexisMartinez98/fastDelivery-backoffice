@@ -8,7 +8,7 @@ interface PercentageCircle {
 const PercentageCircle: React.FC<PercentageCircle> = ({ value }) => {
   return (
     <div>
-      <Card className="w-[71px] h-[71px] border-none bg-gradient-to-br">
+      <Card className="w-[81px] h-[81px] border-none bg-gradient-to-br">
         <CardBody className="justify-center items-center pb-0">
           <CircularProgress
             classNames={{
@@ -18,7 +18,7 @@ const PercentageCircle: React.FC<PercentageCircle> = ({ value }) => {
               value:
                 " text-base font-bold  absolute inset-0 flex items-center justify-center",
             }}
-            value={value}
+            value={value || 0}
             strokeWidth={4}
             showValueLabel={true}
           />

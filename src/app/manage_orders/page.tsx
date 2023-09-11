@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DateCarousel from "../components/Date";
 
 import PercentageCircle from "../components/commons/PercentageCircle";
@@ -7,8 +7,91 @@ import avatar1 from "../assets/avatar1.jpeg";
 import avatar2 from "../assets/avatar2.jpeg";
 import Image from "next/image";
 import avatar3 from "../assets/avatar3.jpeg";
+import fakeDeliverys from "./fakeDeliverys.json";
 
 const page = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Función para actualizar la fecha seleccionada
+  const handleDateChange = (newDate: Date) => {
+    setSelectedDate(newDate);
+  };
+
+  // Funciones para calcular los valores según la fecha seleccionada
+  const calculateRepartidoresActivos = () => {
+    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const fechaSeleccionada = fakeDeliverys.fechas.find(
+      (fecha) => fecha.fecha === selectedDateString
+    );
+    if (fechaSeleccionada) {
+      return fechaSeleccionada.repartidores.filter(
+        (repartidor) => repartidor.activo
+      ).length;
+    }
+    return 0;
+  };
+
+  const calculateTotalRepartidores = () => {
+    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const fechaSeleccionada = fakeDeliverys.fechas.find(
+      (fecha) => fecha.fecha === selectedDateString
+    );
+    if (fechaSeleccionada) {
+      return fechaSeleccionada.repartidores.length;
+    }
+    return 0;
+  };
+
+  const calculateTotalPaquetes = () => {
+    return 10 * calculateRepartidoresActivos();
+  };
+
+  const calculatePaquetesRepartidos = () => {
+    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const fechaSeleccionada = fakeDeliverys.fechas.find(
+      (fecha) => fecha.fecha === selectedDateString
+    );
+
+    if (fechaSeleccionada) {
+      const repartidoresActivos = fechaSeleccionada.repartidores.filter(
+        (repartidor) => repartidor.activo
+      ).length;
+
+      const paquetesRepartidos = fechaSeleccionada.repartidores.reduce(
+        (total, repartidor) => {
+          return (
+            total +
+            repartidor.paquetes.filter((paquete) => paquete.entregado).length
+          );
+        },
+        0
+      );
+
+      return paquetesRepartidos;
+    }
+
+    return 0;
+  };
+
+  const PercentageRepartidoresValue = () => {
+    return (calculateRepartidoresActivos() / 10) * 100;
+  };
+  const PercentajePaquetesValue = () => {
+    return (calculatePaquetesRepartidos() / calculateTotalPaquetes()) * 100;
+  };
+
   return (
     <div className=" rounded-2xl  text-[#3D1DF3] bg-[#C7FFB1] mr-6  ml-6 mt-4 font-poppins">
       <div className="h-16 flex items-center">
@@ -44,13 +127,18 @@ const page = () => {
           </div>
         </div>
         <div>
-          <DateCarousel />
+          <DateCarousel
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+          />
         </div>
         <div className="p-3 mt-4 rounded-xl  border-[#3D1DF3] border-[1px] ml-5 mr-5 ">
           <div className="flex justify-between border-b-[1px] border-[#3D1DF3] ">
             <h4 className="font-bold">Detalles</h4>
             <div className="flex items-center">
-              <h4 className="mr-2">13/09/23</h4>
+              <h4 className="mr-2">
+                {selectedDate.toLocaleDateString("es-ES")}
+              </h4>
               <svg
                 className="items-center"
                 width="11"
@@ -68,10 +156,10 @@ const page = () => {
           </div>
           <div className="border-b-[1px] border-[#3D1DF3]">
             <div className="relative flex items-center justify-start ml-3 mt-8 ">
-              <PercentageCircle value={20} />
+              <PercentageCircle value={PercentageRepartidoresValue()} />
               <div className="ml-5 ">
                 <h4 className="font-bold text-base">Repartidores</h4>
-                <h6 className="text-sm">2/10 activos</h6>
+                <h6 className="text-sm">{`${calculateRepartidoresActivos()}/10 activos`}</h6>
               </div>
             </div>
             <div className="flex justify-between mt-5">
@@ -94,10 +182,10 @@ const page = () => {
           </div>
 
           <div className="relative flex items-center justify-start ml-3 mt-8 ">
-            <PercentageCircle value={80} />
+            <PercentageCircle value={PercentajePaquetesValue()} />
             <div className="ml-5">
               <h4 className="font-bold text-base">Paquetes</h4>
-              <h6 className="text-sm">16/20 activos</h6>
+              <h6 className="text-sm">{`${calculatePaquetesRepartidos()}/ ${calculateTotalPaquetes()} repartidos`}</h6>
             </div>
           </div>
           <div className="flex justify-end mt-5 ">

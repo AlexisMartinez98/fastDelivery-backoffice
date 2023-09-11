@@ -1,8 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import fakeDelivarys from "../manage_orders/fakeDeliverys.json";
 
-const DateCarousel: React.FC = () => {
+interface DateCarouselProps {
+  selectedDate: Date;
+  onDateChange: (newDate: Date) => void;
+}
+
+const DateCarousel: React.FC<DateCarouselProps> = ({
+  selectedDate,
+  onDateChange,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [dates, setDates] = useState<Date[]>([]);
 
@@ -28,7 +36,11 @@ const DateCarousel: React.FC = () => {
     setDates(generatedDates);
   };
 
-  React.useEffect(() => {
+  const handleDateClick = (date: Date) => {
+    onDateChange(date);
+  };
+
+  useEffect(() => {
     generateDates();
   }, [currentDate]);
 
@@ -58,10 +70,11 @@ const DateCarousel: React.FC = () => {
           <button
             key={index}
             className={`${
-              date.toDateString() === currentDate.toDateString()
+              date.toDateString() === selectedDate.toDateString()
                 ? "bg-[#C7FFB1] "
                 : "bg-gray-100"
             } p-2 rounded-xl text-center w-12 h-16 border-[1px] border-[#3D1DF3]`}
+            onClick={() => handleDateClick(date)}
           >
             <div className="text-xs font-semibold">
               {date.toLocaleDateString("es-ES", { weekday: "short" })}
