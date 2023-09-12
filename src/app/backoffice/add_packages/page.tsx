@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Calendar from "../components/Calendar";
-import Count from "../components/Count";
+import Calendar from "../../components/Calendar";
+import Count from "../../components/Count";
 import { useState } from "react";
 
 const page = () => {

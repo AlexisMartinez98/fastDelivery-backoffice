@@ -1,12 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import DateCarousel from "../components/Date";
+import DateCarousel from "../../components/Date";
 
-import PercentageCircle from "../components/commons/PercentageCircle";
-import avatar1 from "../assets/avatar1.jpeg";
-import avatar2 from "../assets/avatar2.jpeg";
+import PercentageCircle from "../../components/commons/PercentageCircle";
+import avatar1 from "../../assets/avatar1.jpeg";
+import avatar2 from "../../assets/avatar2.jpeg";
 import Image from "next/image";
-import avatar3 from "../assets/avatar3.jpeg";
+import avatar3 from "../../assets/avatar3.jpeg";
 import fakeDeliverys from "./fakeDeliverys.json";
 
 const page = () => {
