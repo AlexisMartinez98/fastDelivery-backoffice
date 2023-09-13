@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import { address } from "../utils/helpers";
-import BoxAddress from "../components/BoxAddress";
+import { address } from "../../utils/helpers";
+import BoxAddress from "../../components/BoxAddress";
 
 type AddressItem = {
   id: any;

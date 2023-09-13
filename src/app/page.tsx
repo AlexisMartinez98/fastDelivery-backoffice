@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Head from "next/head";
+import Login from "./login/page";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
-      <h1>BACKOFFICE sadklsdlk</h1>;
+      <Login />
     </>
   );
 }
