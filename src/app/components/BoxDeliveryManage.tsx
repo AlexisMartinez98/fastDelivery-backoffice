@@ -3,6 +3,7 @@ import React from "react";
 import PercentageCircle from "./commons/PercentageCircle";
 import Image from "next/image";
 import avatar1 from "../assets/avatar1.jpeg";
+import { stat } from "fs";
 
 
 interface BoxDeliveryManageProps {
@@ -14,7 +15,7 @@ interface BoxDeliveryManageProps {
 
 const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({name,status,porcentaje,url_image}) => {
 
-    console.log(url_image)
+    console.log(status)
   return (
     <div className="h-[17vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-t-2">
         <div className=" bg-[#ffffff] flex justify-between ml-5  h-[85%] items-center ">
@@ -22,7 +23,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({name,status,porcen
             <div><PercentageCircle value={porcentaje}/></div>
             <div className="ml-5">
             <h3 className="text-xl font-semibold ">{name}</h3>
-                <div className={` h-[15px] bg-[${status==="ENTREGADO" ? "#c7ffb1":"#f8e169"}] rounded-2xl text-center flex items-center text-[0.75rem] px-2 font-semibold`}>{status}</div>
+                <div className={` h-[15px] bg-[${status==="ENTREGADO" ? "#1df366":status==="INACTIVO" ? "#b1a5fa":"#f8e169"}] rounded-2xl text-center flex items-center text-[0.75rem] px-2 font-semibold `}>{status}</div>
                 </div>
 
         </div>

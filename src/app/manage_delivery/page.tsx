@@ -9,7 +9,7 @@ function ManageDelivery() {
     console.log(fakeData)
   return (
      <main className="mr-6 ml-6 mt-4 mb-8 font-poppins" >
-      <div className="profile-info rounded-2xl text-[#3D1DF3] bg-[#C7FFB1]">
+      <div className="profile-info rounded-tl-[10px] rounded-tr-[10px] text-[#3D1DF3] bg-[#C7FFB1] pb-2">
         <div className="h-16 flex items-center justify-between  ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ function ManageDelivery() {
           
         </div>
       </div>
-      <div className="py-5 bg-[#ffffff]">
+      <div className="py-5 bg-[#ffffff] rounded-xl relative top-[-6px]" >
       <div className="border-b-2">
       {fakeData.map((data,i)=>{
         return(<BoxDeliveryManage name={data.name} status={data.state} porcentaje={data.porcentaje} url_image={data.url_img}/>)
