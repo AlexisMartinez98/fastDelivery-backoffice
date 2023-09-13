@@ -8,6 +8,7 @@ import avatar2 from "../../assets/avatar2.jpeg";
 import Image from "next/image";
 import avatar3 from "../../assets/avatar3.jpeg";
 import fakeDeliverys from "./fakeDeliverys.json";
+import Link from "next/link";
 
 const page = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -94,22 +95,7 @@ const page = () => {
 
   return (
     <div className=" rounded-2xl  text-[#3D1DF3] bg-[#C7FFB1] mr-6  ml-6 mt-4 font-poppins">
-      <div className="h-16 flex items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="w-8 h-8  mr-8 ml-6 "
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-
+      <div className="flex justify-center items-center  h-16">
         <h1 className="m-5 font-bold text-lg ">Gestionar Pedidos</h1>
       </div>
       <div className="rounded-2xl mb-5 pb-6 bg-white  ">
@@ -175,9 +161,11 @@ const page = () => {
                   alt="avatar2"
                 />
               </div>
-              <button className="bg-[#00EA77] rounded-2xl w-16 h-9 ">
-                Ver
-              </button>
+              <Link href="/backoffice/manage_delivery">
+                <button className="bg-[#00EA77] rounded-2xl w-16 h-9 ">
+                  Ver
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -189,9 +177,11 @@ const page = () => {
             </div>
           </div>
           <div className="flex justify-end mt-5 ">
-            <button className="bg-[#00EA77] rounded-2xl w-16 h-9 mb-1">
-              Ver
-            </button>
+            <Link href="/backoffice/package_history">
+              <button className="bg-[#00EA77] rounded-2xl w-16 h-9 mb-1">
+                Ver
+              </button>
+            </Link>
           </div>
         </div>
       </div>

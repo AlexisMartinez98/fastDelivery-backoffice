@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const page = () => {
@@ -222,9 +223,11 @@ const page = () => {
             />
           </svg>
         </div>
-        <button className="bg-[#00EA77] text-[#3D1DF3] rounded-2xl w-full h-9  mb-5">
-          Ingresar
-        </button>
+        <Link href="/backoffice/manage_orders">
+          <button className="bg-[#00EA77] text-[#3D1DF3] rounded-2xl w-full h-9  mb-5">
+            Ingresar
+          </button>
+        </Link>
         <h4 className="flex text-white text-xs items-center justify-center ">
           OLVIDÉ MI CONTRASEÑA
         </h4>
