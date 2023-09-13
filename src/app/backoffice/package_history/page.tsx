@@ -1,4 +1,4 @@
-"use client";
+
 import React from "react";
 import { address } from "../../utils/helpers";
 import BoxAddress from "../../components/BoxAddress";
