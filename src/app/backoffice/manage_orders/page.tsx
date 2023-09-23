@@ -119,7 +119,7 @@ const page = () => {
           />
         </div>
         <div className="p-3 mt-4 rounded-xl  border-[#3D1DF3] border-[1px] ml-5 mr-5 ">
-          <div className="flex justify-between border-b-[1px] border-[#3D1DF3] ">
+          <div className="dotted-border flex justify-between  ">
             <h4 className="font-bold">Detalles</h4>
             <div className="flex items-center">
               <h4 className="mr-2">
@@ -140,7 +140,7 @@ const page = () => {
               </svg>
             </div>
           </div>
-          <div className="border-b-[1px] border-[#3D1DF3]">
+          <div className="dotted-border">
             <div className="relative flex items-center justify-start ml-3 mt-8 ">
               <PercentageCircle value={PercentageRepartidoresValue()} />
               <div className="ml-5 ">
