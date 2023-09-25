@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 interface CalendarProps {
   setDeadline: (date: string) => void;
 }
@@ -11,9 +10,22 @@ const Calendar: React.FC<CalendarProps> = (props) => {
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
+    if (date) {
+      props.setDeadline(date.toLocaleDateString());
+    } else {
+      props.setDeadline("");
+    }
   };
-  let date = selectedDate?.toLocaleDateString();
-  props.setDeadline(date!);
+
+  const filterDate = (date: Date | null) => {
+    if (!date) {
+      return false;
+    }
+    const dateNow = new Date();
+    dateNow.setHours(0, 0, 0, 0);
+    return date >= dateNow;
+  };
+
   return (
     <div className="flex items-center placeholder-[#3D1DF3] text-sm border rounded-xl px-3 py-2 mt-1 focus:outline-none border-[#3D1DF3] w-[120px]">
       <DatePicker
@@ -23,6 +35,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
         placeholderText="00/00/00"
         isClearable={false}
         className="placeholder-[#3D1DF3] w-[85px]"
+        filterDate={filterDate}
       />
       <svg
         width="9"
