@@ -15,7 +15,6 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
-    "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "next": "13.4.19",
     "postcss": "8.4.29",
@@ -28,6 +27,10 @@
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "eslint-plugin-react": "^7.33.2",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1"
   }
