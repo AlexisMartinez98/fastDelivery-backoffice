@@ -1,4 +1,5 @@
 "use client";
+import "./index.css";
 import React from "react";
 import { useState } from "react";
 import { address } from "../../utils/helpers";
@@ -91,10 +92,9 @@ const page = () => {
           <p className="font-normal text-xs">Sin repartos pendientes</p>
         </div>
       </div>
-      <div className="delivery-history bg-white rounded-2xl text-[#3D1DF3] font-black mt-3 py-4">
+      <div className="delivery-history bg-white rounded-2xl text-[#3D1DF3] font-black mt-3 py-4 relative">
         <div className="flex justify-between">
-          <h2 className="ml-5 ">Historial de repartos</h2>
-
+          <h2 className="ml-5">Historial de repartos</h2>
           <svg
             width="9"
             height="7"
@@ -112,7 +112,7 @@ const page = () => {
         <p className="ml-5 font-normal text-xs mt-1">
           {address.length} paquetes entregados
         </p>
-        <div className="mt-3 h-[310px] overflow-y-auto relative">
+        <div className="mt-3 h-[310px] overflow-y-auto">
           {address.map((item: AddressItem) => (
             <BoxAddress
               key={item.id}
@@ -122,6 +122,7 @@ const page = () => {
             />
           ))}
         </div>
+        <div className="rounded-xl bg-gradient h-20 absolute bottom-0 left-0 right-0 pointer-events-none"></div>
       </div>
     </main>
   );
