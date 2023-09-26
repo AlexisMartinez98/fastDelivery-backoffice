@@ -1,7 +1,7 @@
+import React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import NavBar from "./components/NavBar";
 
 const poppins = Poppins({
   subsets: ["latin"],

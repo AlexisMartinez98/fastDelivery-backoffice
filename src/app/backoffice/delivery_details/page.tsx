@@ -7,7 +7,7 @@ import BoxAddress from "../../components/BoxAddress";
 import Link from "next/link";
 
 type AddressItem = {
-  id: any;
+  id: string;
   address: string;
   status: string;
 };

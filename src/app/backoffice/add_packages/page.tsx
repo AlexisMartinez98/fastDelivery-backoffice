@@ -11,6 +11,7 @@ const page = () => {
     name: "",
     weight: "",
   });
+  // eslint-disable-next-line
   const [deadline, setDeadline] = useState("");
   const [amount, setAmount] = useState(0);
   return (
