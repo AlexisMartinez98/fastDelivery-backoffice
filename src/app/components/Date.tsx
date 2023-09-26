@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import fakeDelivarys from "../backoffice/manage_orders/fakeDeliverys.json";
 
 interface DateCarouselProps {
   selectedDate: Date;

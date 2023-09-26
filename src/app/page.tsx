@@ -1,4 +1,4 @@
-import Image from "next/image";
+import React from "react";
 import Head from "next/head";
 import Login from "./login/page";
 

@@ -2,8 +2,6 @@
 import React from "react";
 import PercentageCircle from "./commons/PercentageCircle";
 import Image from "next/image";
-import avatar1 from "../assets/avatar1.jpeg";
-import { stat } from "fs";
 import Link from "next/link";
 
 interface BoxDeliveryManageProps {

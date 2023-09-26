@@ -13,12 +13,10 @@ import Link from "next/link";
 const page = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Función para actualizar la fecha seleccionada
   const handleDateChange = (newDate: Date) => {
     setSelectedDate(newDate);
   };
 
-  // Funciones para calcular los valores según la fecha seleccionada
   const calculateRepartidoresActivos = () => {
     const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
       year: "numeric",
@@ -32,21 +30,6 @@ const page = () => {
       return fechaSeleccionada.repartidores.filter(
         (repartidor) => repartidor.activo
       ).length;
-    }
-    return 0;
-  };
-
-  const calculateTotalRepartidores = () => {
-    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const fechaSeleccionada = fakeDeliverys.fechas.find(
-      (fecha) => fecha.fecha === selectedDateString
-    );
-    if (fechaSeleccionada) {
-      return fechaSeleccionada.repartidores.length;
     }
     return 0;
   };
@@ -66,10 +49,6 @@ const page = () => {
     );
 
     if (fechaSeleccionada) {
-      const repartidoresActivos = fechaSeleccionada.repartidores.filter(
-        (repartidor) => repartidor.activo
-      ).length;
-
       const paquetesRepartidos = fechaSeleccionada.repartidores.reduce(
         (total, repartidor) => {
           return (

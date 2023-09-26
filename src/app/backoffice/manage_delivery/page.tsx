@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import fakeData from "./fakeData.json";
 import BoxDeliveryManage from "../../components/BoxDeliveryManage";
 import Link from "next/link";
@@ -34,6 +34,7 @@ function ManageDelivery() {
           {fakeData.map((data, i) => {
             return (
               <BoxDeliveryManage
+                key={i}
                 name={data.name}
                 status={data.state}
                 porcentaje={data.porcentaje}
