@@ -35,18 +35,17 @@ const page = () => {
         </div>
 
         <div
-          className="rounded-2xl py-4 bg-white"
-          style={{
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            borderTopLeftRadius: "1rem",
-            borderTopRightRadius: "1rem",
-          }}
+          className="rounded-2xl py-4  bg-white  justify-end"
+         
         >
-          <div className="mt-2 h-[460px] overflow-y-auto relative">
-            <span className="ml-6 text-lg">
-              {" "}
-              <b> {totalPackages} paquetes</b>{" "}
+          <div className="mt-0 h-[485px] overflow-y-auto relative">
+            <span className="ml-6 text-md">
+              
+              <b> {totalPackages} paquetes</b> <br /> 
+            <span className="text-sm ml-6">
+              con el criterio de filtrado seleccionado
+
+              </span>
             </span>
             {address.map((item: AddressItem) => (
               <BoxAddress
@@ -57,22 +56,18 @@ const page = () => {
               />
             ))}
           </div>
-        </div>
-        <div
-          className="rounded-2xl py-5 bg-white "
-          style={{
-            paddingBottom: "18%",
-            borderBottomLeftRadius: "1rem",
-            borderBottomRightRadius: "1rem",
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-        >
-          <Link href="/backoffice/add_packages">
-            <span className="bg-customGreen text-[#3D1DF3] text-4xl w-14 h-14 rounded-full flex items-center justify-center absolute bottom-8 right-8 cursor-pointer">
+
+        
+        
+        
+        <div className="bg-customGreen text-[#3D1DF3] text-4xl w-14 h-14 rounded-full flex justify-end ml-auto mr-5 mt-1" >
+          <Link href="/backoffice/add_packages" className="flex items-center">
+            <span className="bg-customGreen text-[#3D1DF3] text-4xl w-14 h-14 rounded-full flex items-center justify-center cursor-pointer ">
               +
             </span>
           </Link>
+        </div>
+
         </div>
       </div>
     </main>
