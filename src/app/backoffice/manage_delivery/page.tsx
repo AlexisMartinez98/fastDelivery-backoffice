@@ -1,10 +1,45 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import fakeData from "./fakeData.json";
 import BoxDeliveryManage from "../../components/BoxDeliveryManage";
 import Link from "next/link";
+import { ArrayAuxVistaRepartidores } from "@/app/utils/auxiliarFunctions";
+
 
 function ManageDelivery() {
+
+
+  
+  
+
+  const [numPagina,setNumPagina]=useState(0)
+  // eslint-disable-next-line
+  const [arrayRepartidores, setArrayRepartidores] = useState<any[]>([]);
+
+  useEffect(()=>{
+
+    
+      const array=ArrayAuxVistaRepartidores(fakeData)
+
+      setArrayRepartidores(array)
+    
+
+
+
+  },[])
+
+  
+
+  const handlerNumPagina=(num:number)=>{
+
+    setNumPagina(num)
+
+  }
+
+
+
+
+
   return (
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
       <div className="profile-info rounded-tl-[10px] rounded-tr-[10px] text-[#3D1DF3] bg-[#C7FFB1] pb-2">
@@ -29,9 +64,13 @@ function ManageDelivery() {
           <div className="w-8 h-8  mr-8 ml-6 "></div>
         </div>
       </div>
-      <div className="py-5 bg-[#ffffff] rounded-xl relative top-[-6px]">
+      <div className="pt-5 bg-[#ffffff] rounded-xl relative top-[-6.5px]">
+      <div className="h-[2.5vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-center rounded-t-lg">
+        </div>
         <div className="border-b-2">
-          {fakeData.map((data, i) => {
+          {
+            // eslint-disable-next-line
+          arrayRepartidores.length>0 && arrayRepartidores[numPagina].map((data:any, i:number) => {
             return (
               <BoxDeliveryManage
                 key={i}
@@ -42,6 +81,18 @@ function ManageDelivery() {
               />
             );
           })}
+        </div>
+        <div className="h-[8vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-center rounded-b-lg">
+         {arrayRepartidores.length>0 &&arrayRepartidores.map((btn,i)=>{
+          return(<div key={i} onClick={()=>{handlerNumPagina(i)}} className={`h-1.5 w-1.5 mr-1.5 rounded-full ${
+            numPagina === i
+              ? "bg-[#3D1DF3]"
+              : "bg-gray-400"
+             
+
+          }`} ></div>)
+         })}
+
         </div>
       </div>
     </main>
