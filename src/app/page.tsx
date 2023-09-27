@@ -1,5 +1,17 @@
-import Image from "next/image";
+import React from "react";
+import Head from "next/head";
+import Login from "./login/page";
 
 export default function Home() {
-  return <h1>BACKOFFICE</h1>;
+  return (
+    <>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <Login />
+    </>
+  );
 }
