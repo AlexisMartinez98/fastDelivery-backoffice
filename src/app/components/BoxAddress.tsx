@@ -54,17 +54,19 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, status, itemId }) => {
           </h4>
         </div>
         <div className="flex justify-between w-full ml-3 mt-1 items-center">
+        
           <p className="font-light text-sm mb-1">
             {address.split(",")[0]},<br></br>
             {address.split(",")[1]}
           </p>
           <svg
-            width="20"
-            height="20"
+            width="25"
+            height="25"
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className="mr-3"
+            
           >
             <path
               d="M8.11377 4.66671C8.38833 3.88991 9.12915 3.33337 9.99997 3.33337C10.8708 3.33337 11.6116 3.88991 11.8862 4.66671"
