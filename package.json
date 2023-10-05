@@ -1,13 +1,14 @@
 {
   "name": "backoffice",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
     "0": "^0.0.0",
@@ -36,5 +37,12 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "semantic-release": "^22.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gerpag/fastDelivery-backoffice-fork-.git"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
