@@ -33,7 +33,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
                   : status === "INACTIVO"
                   ? "bg-[#b1a5fa]"
                   : "bg-[#f8e169]"
-              } rounded-2xl text-center flex items-center text-[0.75rem] px-2 font-semibold `}
+              } rounded-2xl  inline-block text-[0.75rem] px-2 font-semibold `}
             >
               {status}
             </div>
@@ -43,7 +43,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
           <Image
             width={500}
             height={500}
-            src={url_image}
+            src={url_image || "/assets/avatar1.jpeg"}
             className="rounded-full w-[40px] h-[40px] object-cover"
             alt="avatar1"
           ></Image>
