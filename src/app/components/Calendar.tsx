@@ -27,14 +27,14 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   return (
-    <div className="flex items-center placeholder-[#3D1DF3] text-sm border rounded-xl px-3 py-2 mt-1 focus:outline-none border-[#3D1DF3] w-[120px]">
+    <div className="flex items-center placeholder-[#3D1DF3] text-sm border rounded-xl px-3 py-2 mt-1 focus:outline-none border-[#3D1DF3]">
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
         dateFormat="dd/MM/yy"
         placeholderText="00/00/00"
         isClearable={false}
-        className="placeholder-[#3D1DF3] w-[85px]"
+        className="placeholder-[#3D1DF3] w-full"
         filterDate={filterDate}
       />
       <svg
