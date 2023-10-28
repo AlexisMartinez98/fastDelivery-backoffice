@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateCarousel from "../../components/Date";
 
 import PercentageCircle from "../../components/commons/PercentageCircle";
@@ -9,12 +9,40 @@ import Image from "next/image";
 import avatar3 from "../../assets/avatar3.jpeg";
 import fakeDeliverys from "./fakeDeliverys.json";
 import Link from "next/link";
+import axios from "axios";
+import { formatDate } from "@/app/utils/formatDate";
 
 const page = () => {
+  // const dispatch = useDispatch();
+  // const user = useSelector((state: RootState) => state.user);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [quantityPackages, setQuantityPackages] = useState(Number);
+  const [packagesDelivered, setPackagesDelivered] = useState(Number);
+
+  useEffect(() => {
+    const packagesFetch = async () => {
+      const formattedDate = formatDate(selectedDate);
+      const response = await axios.get(
+        `http://localhost:4000/api/v1/backoffice/packagesPerDay/${formattedDate}`
+      );
+      const packagesData = response.data;
+      const quantityPackagesDelivered = packagesData.allPackagesPerDay.length;
+      const delivered = packagesData.allPackagesPerDay.filter(
+        // eslint-disable-next-line
+        (packages: any) => packages.delivered
+      );
+      const quantityDelivered = delivered.length;
+
+      setPackagesDelivered(quantityDelivered);
+      setQuantityPackages(quantityPackagesDelivered);
+    };
+    packagesFetch();
+  }, [selectedDate]);
 
   const handleDateChange = (newDate: Date) => {
     setSelectedDate(newDate);
+    // dispatch(setSelectedDate(newDate))
   };
 
   const calculateRepartidoresActivos = () => {
@@ -23,6 +51,7 @@ const page = () => {
       month: "2-digit",
       day: "2-digit",
     });
+
     const fechaSeleccionada = fakeDeliverys.fechas.find(
       (fecha) => fecha.fecha === selectedDateString
     );
@@ -34,42 +63,11 @@ const page = () => {
     return 0;
   };
 
-  const calculateTotalPaquetes = () => {
-    return 10 * calculateRepartidoresActivos();
-  };
-
-  const calculatePaquetesRepartidos = () => {
-    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const fechaSeleccionada = fakeDeliverys.fechas.find(
-      (fecha) => fecha.fecha === selectedDateString
-    );
-
-    if (fechaSeleccionada) {
-      const paquetesRepartidos = fechaSeleccionada.repartidores.reduce(
-        (total, repartidor) => {
-          return (
-            total +
-            repartidor.paquetes.filter((paquete) => paquete.entregado).length
-          );
-        },
-        0
-      );
-
-      return paquetesRepartidos;
-    }
-
-    return 0;
-  };
-
   const PercentageRepartidoresValue = () => {
     return (calculateRepartidoresActivos() / 10) * 100;
   };
   const PercentajePaquetesValue = () => {
-    return (calculatePaquetesRepartidos() / calculateTotalPaquetes()) * 100;
+    return (packagesDelivered / quantityPackages) * 100;
   };
 
   return (
@@ -152,7 +150,9 @@ const page = () => {
             <PercentageCircle value={PercentajePaquetesValue()} />
             <div className="ml-5">
               <h4 className="font-bold text-base">Paquetes</h4>
-              <h6 className="text-sm">{`${calculatePaquetesRepartidos()}/ ${calculateTotalPaquetes()} repartidos`}</h6>
+              <h6 className="text-sm">
+                {packagesDelivered}/{quantityPackages}
+              </h6>
             </div>
           </div>
           <div className="flex justify-end mt-5 ">
