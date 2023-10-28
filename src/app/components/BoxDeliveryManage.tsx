@@ -19,7 +19,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
 }) => {
   return (
     <Link href="/backoffice/delivery_details">
-      <div className="h-[17vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-t-2">
+      <div className="h-[16vh] w-[92%] mx-auto bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-b-2">
         <div className=" bg-[#ffffff] flex justify-between ml-5  h-[85%] items-center ">
           <div>
             <PercentageCircle value={porcentaje} />
