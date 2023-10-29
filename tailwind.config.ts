@@ -17,6 +17,7 @@ const config: Config = {
       },
       backgroundColor: {
         customGreen: "#00EA77",
+        customBlue:"#3D1DF3]"
       },
     },
   },

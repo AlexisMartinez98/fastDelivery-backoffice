@@ -9,6 +9,7 @@ interface BoxDeliveryManageProps {
   status: string;
   porcentaje: number;
   url_image: string;
+  id:string
 }
 
 const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
@@ -16,10 +17,11 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
   status,
   porcentaje,
   url_image,
+  id
 }) => {
   return (
-    <Link href="/backoffice/delivery_details">
-      <div className="h-[17vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-t-2">
+    <Link href={`/backoffice/delivery_details/${id}`}>
+      <div className="h-[16vh] w-[92%] mx-auto bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-b-2">
         <div className=" bg-[#ffffff] flex justify-between ml-5  h-[85%] items-center ">
           <div>
             <PercentageCircle value={porcentaje} />
@@ -33,7 +35,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
                   : status === "INACTIVO"
                   ? "bg-[#b1a5fa]"
                   : "bg-[#f8e169]"
-              } rounded-2xl text-center flex items-center text-[0.75rem] px-2 font-semibold `}
+              } rounded-2xl  inline-block text-[0.75rem] px-2 font-semibold `}
             >
               {status}
             </div>
@@ -43,7 +45,7 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
           <Image
             width={500}
             height={500}
-            src={url_image}
+            src={url_image || "/assets/avatar1.jpeg"}
             className="rounded-full w-[40px] h-[40px] object-cover"
             alt="avatar1"
           ></Image>
