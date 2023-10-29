@@ -1,70 +1,75 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DateCarousel from "../../components/Date";
-
 import PercentageCircle from "../../components/commons/PercentageCircle";
 import avatar1 from "../../assets/avatar1.jpeg";
 import avatar2 from "../../assets/avatar2.jpeg";
 import Image from "next/image";
 import avatar3 from "../../assets/avatar3.jpeg";
-import fakeDeliverys from "./fakeDeliverys.json";
 import Link from "next/link";
 import axios from "axios";
 import { formatDate } from "@/app/utils/formatDate";
+import { useDispatch } from "react-redux";
+import {setSelectedDate} from "../../state/dateSlice"
 
 const page = () => {
-  // const dispatch = useDispatch();
-  // const user = useSelector((state: RootState) => state.user);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const dispatch = useDispatch();  
+  const [selectDate, setSelectDate] = useState(new Date());
   const [quantityPackages, setQuantityPackages] = useState(Number);
   const [packagesDelivered, setPackagesDelivered] = useState(Number);
 
+  const [quantityActives, setQuantityActives] = useState(Number)
+  const [totalDeliveries, setTotalDeliveries] = useState(Number)
+
+
+  const formattedDate = formatDate(selectDate);
   useEffect(() => {
+    
     const packagesFetch = async () => {
-      const formattedDate = formatDate(selectedDate);
-      const response = await axios.get(
-        `http://localhost:4000/api/v1/backoffice/packagesPerDay/${formattedDate}`
+    const response = await axios.get(
+      `http://localhost:4000/api/v1/backoffice/packagesPerDay/${formattedDate}`
       );
       const packagesData = response.data;
       const quantityPackagesDelivered = packagesData.allPackagesPerDay.length;
       const delivered = packagesData.allPackagesPerDay.filter(
         // eslint-disable-next-line
         (packages: any) => packages.delivered
-      );
-      const quantityDelivered = delivered.length;
-
-      setPackagesDelivered(quantityDelivered);
-      setQuantityPackages(quantityPackagesDelivered);
-    };
-    packagesFetch();
-  }, [selectedDate]);
-
-  const handleDateChange = (newDate: Date) => {
-    setSelectedDate(newDate);
-    // dispatch(setSelectedDate(newDate))
-  };
-
-  const calculateRepartidoresActivos = () => {
-    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-
-    const fechaSeleccionada = fakeDeliverys.fechas.find(
-      (fecha) => fecha.fecha === selectedDateString
-    );
-    if (fechaSeleccionada) {
-      return fechaSeleccionada.repartidores.filter(
-        (repartidor) => repartidor.activo
-      ).length;
+        );
+        const quantityDelivered = delivered.length;
+        
+        setPackagesDelivered(quantityDelivered);
+        setQuantityPackages(quantityPackagesDelivered);
+      };
+      
+      const userFetch = async () => {
+      try{
+        const response =await axios.get( `http://localhost:4000/api/v1/backoffice/getAllDeliveryManByDate/${formattedDate}`)
+        const userActive = response.data
+        const quantityDelivery = userActive.deliveryMen.length
+         // eslint-disable-next-line
+        const actives = userActive.deliveryMen.filter((active: any) => active.deliveries)
+        const quantityActive = actives.length
+    
+        setQuantityActives(quantityActive)
+        setTotalDeliveries(quantityDelivery)
+      
+      }catch(error){
+        console.error("error:", error)
+      }
+      
     }
-    return 0;
+    userFetch()
+    packagesFetch();
+    dispatch(setSelectedDate(formattedDate))
+  }, [selectDate]);
+  
+  const handleDateChange = (newDate: Date) => {
+    setSelectDate(newDate);
   };
+
 
   const PercentageRepartidoresValue = () => {
-    return (calculateRepartidoresActivos() / 10) * 100;
+    return (quantityActives / totalDeliveries) * 100;
   };
   const PercentajePaquetesValue = () => {
     return (packagesDelivered / quantityPackages) * 100;
@@ -89,10 +94,11 @@ const page = () => {
             <h5 className=" text-base">Estos son los pedidos del día</h5>
           </div>
         </div>
-        <div>
+        <div >
           <DateCarousel
-            selectedDate={selectedDate}
+            selectedDate={selectDate}
             onDateChange={handleDateChange}
+           
           />
         </div>
         <div className="p-3 mt-4 rounded-xl  border-[#3D1DF3] border-[1px] ml-5 mr-5 ">
@@ -100,7 +106,7 @@ const page = () => {
             <h4 className="font-bold">Detalles</h4>
             <div className="flex items-center">
               <h4 className="mr-2">
-                {selectedDate.toLocaleDateString("es-ES")}
+                {selectDate.toLocaleDateString("es-ES")}
               </h4>
               <svg
                 className="items-center"
@@ -119,10 +125,10 @@ const page = () => {
           </div>
           <div className="dotted-border">
             <div className="relative flex items-center justify-start ml-3 mt-8 ">
-              <PercentageCircle value={PercentageRepartidoresValue()} />
+            <PercentageCircle value={PercentageRepartidoresValue()} aria-label="Porcentaje de repartidores activos" />
               <div className="ml-5 ">
                 <h4 className="font-bold text-base">Repartidores</h4>
-                <h6 className="text-sm">{`${calculateRepartidoresActivos()}/10 activos`}</h6>
+                <h6 className="text-sm">{quantityActives}/{totalDeliveries}</h6>
               </div>
             </div>
             <div className="flex justify-between mt-5">
