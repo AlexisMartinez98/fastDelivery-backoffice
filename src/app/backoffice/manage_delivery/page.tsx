@@ -4,13 +4,23 @@ import BoxDeliveryManage from "../../components/BoxDeliveryManage";
 import BoxDate from "@/app/components/commons/boxDate";
 import Link from "next/link";
 import axios from "axios";
+import {  useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "@/app/state/store";
 
 function ManageDelivery() {
-  const date:string = "2023-10-27";
-  const [numPagina, setNumPagina] = useState(4);
 
+  const date: Date = useSelector((state: RootState) => state.date.selectedDate);
+  const objDate = new Date(date);
+  const diasSemana:string[] = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab","Dom"];
+  const diaDelMes:number = objDate.getDate() +1
+  const diaDeLaSemana:string = diasSemana[objDate.getDay()];
+  const nombreMes = objDate.toLocaleString('es-ES', { month: 'long' });
+  
+ 
+ 
+  const [numPagina, setNumPagina] = useState(4);
   const handlerNumPagina = () => {
-    if (arrayRepartidores.length - numPagina >= 0) {
+    if (arrayRepartidores.length - numPagina > 0) {
       setNumPagina(numPagina + 4);
     } else {
       setNumPagina(4);
@@ -30,13 +40,16 @@ function ManageDelivery() {
   const [arrayRepartidores, setArrayRepartidores] = useState<Repartidor[]>([]);
 
   useEffect(() => {
-    axios
+   
+      axios
       .get(
         `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${date}`
       )
       .then((response) => {
         setArrayRepartidores(response.data.dealersInfo);
       });
+    
+    
   }, []);
 
   console.log(arrayRepartidores);
@@ -68,16 +81,16 @@ function ManageDelivery() {
        
           <div className="h-[45px] w-[92%]  flex justify-between items-end border-b-2 mb-4 mx-auto  ">
 
-            <p className="- text-[#3D1DF3] font-semibold ">Enero</p>
+            <p className="- text-[#3D1DF3] font-semibold ">{nombreMes}</p>
             <div className=" relative top-7">
-            <BoxDate/>
+            <BoxDate diaDelMes={diaDelMes} diaDeLaSemana={diaDeLaSemana}/>
             </div>
             </div>
         
         <div className="">
           {
             // eslint-disable-next-line
-            arrayRepartidores.length > 0 &&arrayRepartidores.slice(0, numPagina).map((data: any, i: number) => {
+           arrayRepartidores.length>0 ? ( arrayRepartidores.length > 0 &&arrayRepartidores.slice(0, numPagina).map((data: any, i: number) => {
                   return (
                     <BoxDeliveryManage
                       key={i}
@@ -85,9 +98,10 @@ function ManageDelivery() {
                       status={data.status}
                       porcentaje={data.porcentaje}
                       url_image={data.url_img}
+                      id={data._id}
                     />
                   );
-                })
+                })): (<h1>No hay repartidores con paquetes asignados </h1>)
           }
         </div>
         <div className="h-[10vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-center rounded-b-lg">
@@ -99,12 +113,12 @@ function ManageDelivery() {
             strokeWidth="2.5"
             stroke="currentColor"
             className={`w-8 h-8 mr-8 ml-6 ${
-              arrayRepartidores.length - numPagina >= 0
+              arrayRepartidores.length - numPagina > 0
                 ? "rotate-90"
                 : "rotate-[270deg]"
             } font-bold`}
           >
-            {/* Cambia el contenido del path según tu necesidad */}
+
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

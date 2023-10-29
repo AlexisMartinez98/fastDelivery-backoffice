@@ -11,6 +11,7 @@ const PercentageCircle: React.FC<PercentageCircle> = ({ value }) => {
       <Card className="w-[81px] h-[81px] border-none bg-gradient-to-br">
         <CardBody className="justify-center items-center pb-0">
           <CircularProgress
+          aria-label="circular progress"
             classNames={{
               svg: "w-[81px] h-[81px] drop-shadow-md",
               indicator: "stroke-[#00EA77]",
