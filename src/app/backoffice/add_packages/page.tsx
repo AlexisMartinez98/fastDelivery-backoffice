@@ -43,7 +43,7 @@ const page = () => {
       .then((res) => {
         toast.success(res.data.msg);
         setPackageData({ direction: "", name: "", weight: "" });
-        setDeadline("");
+        setDeadline("00/00/0000");
       })
       .catch((error) => {
         console.log(error);
@@ -143,7 +143,7 @@ const page = () => {
                 >
                   Fecha de Entrega
                 </label>
-                <Calendar setDeadline={setDeadline} />
+                <Calendar deadline={deadline} setDeadline={setDeadline} />
               </div>
             </div>
 
