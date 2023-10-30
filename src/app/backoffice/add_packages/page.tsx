@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 const page = () => {
   const [packageData, setPackageData] = useState({
@@ -14,6 +15,7 @@ const page = () => {
     weight: "",
   });
   const [deadline, setDeadline] = useState("");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
@@ -31,8 +33,13 @@ const page = () => {
       weight: packageData.weight,
       delivery_date: deadline,
     };
+    const token = Cookies.get("token");
     axios
-      .post("http://localhost:4000/api/v1/backoffice/addPackages", pack)
+      .post("http://localhost:4000/api/v1/backoffice/addPackages", pack, {
+        headers: {
+          Authorization: token,
+        },
+      })
       .then((res) => {
         toast.success(res.data.msg);
         setPackageData({ direction: "", name: "", weight: "" });
@@ -41,7 +48,8 @@ const page = () => {
       .catch((error) => {
         console.log(error);
         toast.error(
-          "Error al enviar los datos. Por favor, inténtalo de nuevo."
+          error.response.data.msg ||
+            "Hubo un error al agregar el paquete, intenta de nuevo"
         );
       });
   };

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../state/actions";
+import Cookies from "js-cookie";
 
 const page = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const page = () => {
         "http://localhost:4000/api/v1/user/login",
         value
       );
+      Cookies.set("token", response.data.token);
       const userData = response.data;
       dispatch(loginSuccess(userData));
       setValue(response.data);
