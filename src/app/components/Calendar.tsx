@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 interface CalendarProps {
+  deadline: string;
   setDeadline: (date: string) => void;
 }
 
@@ -11,7 +12,10 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     if (date) {
-      props.setDeadline(date.toLocaleDateString());
+      const formattedDate = date.toISOString().split("T")[0];
+      const formattedDateArray = formattedDate.split("-");
+      const formattedDateString = `${formattedDateArray[0]}-${formattedDateArray[1]}-${formattedDateArray[2]}`;
+      props.setDeadline(formattedDateString);
     } else {
       props.setDeadline("");
     }
@@ -31,8 +35,8 @@ const Calendar: React.FC<CalendarProps> = (props) => {
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
-        dateFormat="dd/MM/yy"
-        placeholderText="00/00/00"
+        dateFormat="dd/MM/yyyy"
+        placeholderText="00/00/0000"
         isClearable={false}
         className="placeholder-[#3D1DF3] w-full"
         filterDate={filterDate}
