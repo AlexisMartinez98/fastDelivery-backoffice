@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 interface BoxAddressProps {
   address: string;
@@ -48,13 +47,18 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, status, itemId }) => {
       </svg>
       <div className="flex flex-col items-start w-64">
         <div className="flex justify-between w-full ml-3 items-center">
-          <h3 className="font-semibold text-sm uppercase">#{itemId}</h3>
-          <h4 className="text-[12px] bg-[#C7FFB1] rounded-2xl text-center px-2">
-            {status}
+          <h3 className="font-semibold text-sm uppercase">
+            #{itemId.slice(19, 24)}
+          </h3>
+          <h4
+            className={`rounded-2xl text-center px-2 text-sm ${
+              !status ? "bg-[#F8E169]" : "bg-[#C7FFB1]"
+            }`}
+          >
+            {!status ? "Pendiente" : "Entregado"}
           </h4>
         </div>
         <div className="flex justify-between w-full ml-3 mt-1 items-center">
-        
           <p className="font-light text-sm mb-1">
             {address.split(",")[0]},<br></br>
             {address.split(",")[1]}
@@ -66,7 +70,6 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, status, itemId }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className="mr-3"
-            
           >
             <path
               d="M8.11377 4.66671C8.38833 3.88991 9.12915 3.33337 9.99997 3.33337C10.8708 3.33337 11.6116 3.88991 11.8862 4.66671"

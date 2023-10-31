@@ -2,14 +2,14 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      fontFamily: {
-      },
+      fontFamily: {},
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -17,7 +17,7 @@ const config: Config = {
       },
       backgroundColor: {
         customGreen: "#00EA77",
-        customBlue:"#3D1DF3]"
+        customBlue: "#3D1DF3]",
       },
     },
   },

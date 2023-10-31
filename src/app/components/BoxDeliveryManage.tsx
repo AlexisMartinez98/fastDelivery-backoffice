@@ -9,7 +9,7 @@ interface BoxDeliveryManageProps {
   status: string;
   porcentaje: number;
   url_image: string;
-  id:string
+  id: string;
 }
 
 const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
@@ -17,10 +17,10 @@ const BoxDeliveryManage: React.FC<BoxDeliveryManageProps> = ({
   status,
   porcentaje,
   url_image,
-  id
+  id,
 }) => {
   return (
-    <Link href={`/backoffice/delivery_details/${id}`}>
+    <Link href={`/delivery_details/${id}`}>
       <div className="h-[16vh] w-[92%] mx-auto bg-[#ffffff] text-[#3D1DF3] flex items-center justify-between border-b-2">
         <div className=" bg-[#ffffff] flex justify-between ml-5  h-[85%] items-center ">
           <div>
