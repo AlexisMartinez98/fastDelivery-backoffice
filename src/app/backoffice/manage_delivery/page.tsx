@@ -4,20 +4,25 @@ import BoxDeliveryManage from "../../components/BoxDeliveryManage";
 import BoxDate from "@/app/components/commons/boxDate";
 import Link from "next/link";
 import axios from "axios";
-import {  useSelector } from "react-redux/es/hooks/useSelector";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "@/app/state/store";
 
 function ManageDelivery() {
-
   const date: Date = useSelector((state: RootState) => state.date.selectedDate);
-  const objDate = new Date(date);
-  const diasSemana:string[] = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab","Dom"];
-  const diaDelMes:number = objDate.getDate() +1
-  const diaDeLaSemana:string = diasSemana[objDate.getDay()];
-  const nombreMes = objDate.toLocaleString('es-ES', { month: 'long' });
-  
- 
- 
+
+  const objDate = new Date(date + "T00:00:00Z");
+  const diaDelMes = objDate.getUTCDate();
+  const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  const diaDeLaSemana = diasSemana[objDate.getUTCDay()];
+  const nombreMes = objDate.toLocaleString("es-ES", {
+    month: "long",
+    timeZone: "UTC",
+  });
+
+  console.log("date", date);
+  console.log("nombreMes", nombreMes);
+  console.log("diaDelMes", diaDelMes);
+
   const [numPagina, setNumPagina] = useState(4);
   const handlerNumPagina = () => {
     if (arrayRepartidores.length - numPagina > 0) {
@@ -27,29 +32,24 @@ function ManageDelivery() {
     }
   };
 
-  
-
   interface Repartidor {
     _id: string;
-    nombre: string;
-    apellido: string;
+    name: string;
+    last_name: string;
     status: string;
-    porcentaje:number
-    
+    porcentaje: number;
+    image: string;
   }
   const [arrayRepartidores, setArrayRepartidores] = useState<Repartidor[]>([]);
 
   useEffect(() => {
-   
-      axios
+    axios
       .get(
         `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${date}`
       )
       .then((response) => {
         setArrayRepartidores(response.data.dealersInfo);
       });
-    
-    
   }, []);
 
   console.log(arrayRepartidores);
@@ -78,31 +78,33 @@ function ManageDelivery() {
         </div>
       </div>
       <div className=" bg-[#ffffff] rounded-xl relative top-[-6.5px]">
-       
-          <div className="h-[45px] w-[92%]  flex justify-between items-end border-b-2 mb-4 mx-auto  ">
+        <div className="h-[45px] w-[92%]  flex justify-between items-end border-b-2 mb-4 mx-auto  ">
+          <p className="- text-[#3D1DF3] font-semibold ">{nombreMes}</p>
+          <div className=" relative top-7">
+            <BoxDate diaDelMes={diaDelMes} diaDeLaSemana={diaDeLaSemana} />
+          </div>
+        </div>
 
-            <p className="- text-[#3D1DF3] font-semibold ">{nombreMes}</p>
-            <div className=" relative top-7">
-            <BoxDate diaDelMes={diaDelMes} diaDeLaSemana={diaDeLaSemana}/>
-            </div>
-            </div>
-        
         <div className="">
-          {
-            // eslint-disable-next-line
-           arrayRepartidores.length>0 ? ( arrayRepartidores.length > 0 &&arrayRepartidores.slice(0, numPagina).map((data: any, i: number) => {
-                  return (
-                    <BoxDeliveryManage
-                      key={i}
-                      name={`${data.nombre} ${data.apellido}`}
-                      status={data.status}
-                      porcentaje={data.porcentaje}
-                      url_image={data.url_img}
-                      id={data._id}
-                    />
-                  );
-                })): (<h1>No hay repartidores con paquetes asignados </h1>)
-          }
+          {arrayRepartidores.length > 0 ? (
+            arrayRepartidores.length > 0 &&
+            arrayRepartidores
+              .slice(0, numPagina)
+              .map((data: Repartidor, i: number) => {
+                return (
+                  <BoxDeliveryManage
+                    key={i}
+                    name={`${data.name} ${data.last_name}`}
+                    status={data.status}
+                    porcentaje={data.porcentaje}
+                    url_image={data.image}
+                    id={data._id}
+                  />
+                );
+              })
+          ) : (
+            <h1>No hay repartidores con paquetes asignados </h1>
+          )}
         </div>
         <div className="h-[10vh] bg-[#ffffff] text-[#3D1DF3] flex items-center justify-center rounded-b-lg">
           <svg
@@ -118,7 +120,6 @@ function ManageDelivery() {
                 : "rotate-[270deg]"
             } font-bold`}
           >
-
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -127,8 +128,6 @@ function ManageDelivery() {
           </svg>
         </div>
       </div>
-
-     
     </main>
   );
 }
