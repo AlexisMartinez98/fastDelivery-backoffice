@@ -45,19 +45,28 @@ const page = () => {
       try{
         const response =await axios.get( `http://localhost:4000/api/v1/backoffice/getAllDeliveryManByDate/${formattedDate}`)
         const userActive = response.data
-        const quantityDelivery = userActive.deliveryMen.length
          // eslint-disable-next-line
         const actives = userActive.deliveryMen.filter((active: any) => active.deliveries)
         const quantityActive = actives.length
     
         setQuantityActives(quantityActive)
-        setTotalDeliveries(quantityDelivery)
+       
       
       }catch(error){
         console.error("error:", error)
       }
       
     }
+    const totalUsersFetch = async ()=>{
+      try{
+        const response = await axios.get(`http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${formattedDate}`)
+        const total= response.data.dealersInfo.length
+         setTotalDeliveries(total)
+      }catch(error){
+        console.error(error)
+      }
+    }
+    totalUsersFetch()
     userFetch()
     packagesFetch();
     dispatch(setSelectedDate(formattedDate))
