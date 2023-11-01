@@ -24,7 +24,6 @@ const page = () => {
   const maxImages = 2;
   const usersToShow = imageUser.slice(0, maxImages);
   const imageUsersCount = imageUser.length - maxImages;
-  console.log(imageUsersCount);
 
   const date: Date = useSelector((state: RootState) => state.date.selectedDate);
   const objDate = new Date(date);

@@ -1,18 +1,50 @@
-import React from "react";
-import { address } from "../../utils/helpers";
-import BoxAddress from "../../components/BoxAddress";
+"use client";
+import React, { useEffect, useState } from "react";
+import BoxDate from "@/app/components/commons/boxDate";
 import Link from "next/link";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "@/app/state/store";
+import BoxAddress from "@/app/components/BoxAddress";
+import axios from "axios";
 
 type AddressItem = {
-  id: string;
+  _id: string;
   address: string;
 };
 
 const page = () => {
-  const totalPackages = address.length;
+  const [packages, setPackages] = useState([]);
+  const date: Date = useSelector((state: RootState) => state.date.selectedDate);
+
+  const objDate = new Date(date + "T00:00:00Z");
+  const diaDelMes = objDate.getUTCDate();
+  const diasSemana = ["dom", "lun", "mar", "mie", "jue", "vie", "sab"];
+  const diaDeLaSemana = diasSemana[objDate.getUTCDay()];
+  const nombreMes = objDate.toLocaleString("es-ES", {
+    month: "long",
+    timeZone: "UTC",
+  });
+  const monthWithCapitalLetter =
+    nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+
+  const totalPackages = packages.length;
+  useEffect(() => {
+    const packages = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/v1/backoffice/packagesPerDay/${date}`
+        );
+
+        setPackages(response.data.allPackagesPerDay);
+      } catch (error) {
+        console.error("error:", error);
+      }
+    };
+    packages();
+  }, []);
 
   return (
-    <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
+    <main className="mr-6 ml-6 mt-4 mb-5 font-poppins">
       <div className="package-info rounded-2xl text-[#3D1DF3] bg-[#C7FFB1] ">
         <div className="h-16 flex items-center">
           <Link href="/backoffice/manage_orders" className="flex items-center">
@@ -31,43 +63,31 @@ const page = () => {
               />
             </svg>
           </Link>
-          <h1 className="ml-4 font-black text-lg ">Paquetes</h1>
+          <h1 className="ml-4 font-black text-lg items-center">Paquetes</h1>
         </div>
 
-        <div
-          className="rounded-2xl py-4  bg-white  justify-end"
-         
-        >
-          <div className="mt-0 h-[485px] overflow-y-auto relative">
-            <span className="ml-6 text-md">
-              
-              <b> {totalPackages} paquetes</b> <br /> 
-            <span className="text-sm ml-6">
-              con el criterio de filtrado seleccionado
+        <div className="  bg-[#ffffff] rounded-xl relative top-[-6.5px]">
+          <div className="mx-5 mt-0 h-[485px] overflow-y-auto relative">
+            <div className="h-[45px] w-auto  flex justify-between items-end  mb-4 dotted-border ">
+              <p className=" text-[#3D1DF3] font-semibold ">
+                {monthWithCapitalLetter}
+              </p>
+              <div className=" relative top-7 ">
+                <BoxDate diaDelMes={diaDelMes} diaDeLaSemana={diaDeLaSemana} />
+              </div>
+            </div>
 
-              </span>
+            <span className=" text-md">
+              <b> {totalPackages} paquetes</b> <br />
             </span>
-            {address.map((item: AddressItem) => (
+            {packages.map((item: AddressItem) => (
               <BoxAddress
-                key={item.id}
-                itemId={item.id}
+                key={item._id}
+                _id={item._id}
                 address={item.address}
-                status=""
               />
             ))}
           </div>
-
-        
-        
-        
-        <div className="bg-customGreen text-[#3D1DF3] text-4xl w-14 h-14 rounded-full flex justify-end ml-auto mr-5 mt-1" >
-          <Link href="/backoffice/add_packages" className="flex items-center">
-            <span className="bg-customGreen text-[#3D1DF3] text-4xl w-14 h-14 rounded-full flex items-center justify-center cursor-pointer ">
-              +
-            </span>
-          </Link>
-        </div>
-
         </div>
       </div>
     </main>
