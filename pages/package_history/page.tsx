@@ -15,12 +15,20 @@ type AddressItem = {
 const page = () => {
   const router = useRouter();
   const { date } = router.query;
-  let formattedDate = new Date();
-  let diaDelMes = 0;
-  let diaDeLaSemana = "";
-  let nombreMes = "";
 
-  if (typeof date === "string") {
+  
+  const objDate = new Date(date + "T00:00:00Z");
+  const diaDelMes = objDate.getUTCDate();
+  const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  const diaDeLaSemana = diasSemana[objDate.getUTCDay()];
+  const nombreMes = objDate.toLocaleString("es-ES", {
+    month: "long",
+    timeZone: "UTC",
+  })
+  const nombreMesCapitalized =
+    nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+
+ /* if (typeof date === "string") {
     formattedDate = new Date(date);
     diaDelMes = formattedDate.getDate();
     const weekday = formattedDate.toLocaleString("default", {
@@ -35,7 +43,7 @@ const page = () => {
       month: "long",
     });
     nombreMes = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-  }
+  }*/
   const [packages, setPackages] = useState([]);
 
   useEffect(() => {
@@ -79,7 +87,7 @@ const page = () => {
         <div className="  bg-[#ffffff] rounded-xl relative">
           <div className="mx-5 mt-0 h-[485px] overflow-y-auto relative">
             <div className="h-[45px] w-auto  flex justify-between items-end  mb-4 dotted-border ">
-              <p className=" text-[#3D1DF3] font-semibold ">{nombreMes}</p>
+              <p className=" text-[#3D1DF3] font-semibold ">{nombreMesCapitalized}</p>
               <svg
                 width="270"
                 height="1"
