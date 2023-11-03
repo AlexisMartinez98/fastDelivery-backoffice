@@ -58,7 +58,7 @@ const page = () => {
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
       <div className="profile-info rounded-2xl text-[#3D1DF3] bg-[#C7FFB1] ">
         <div className="h-16 flex items-center">
-          <Link href="/backoffice/package_history">
+          <Link href="/backoffice/manage_orders">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

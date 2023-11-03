@@ -2,22 +2,24 @@
 import "./index.css";
 import React from "react";
 import { useState } from "react";
-import BoxAddress from "../../src/app/components/BoxAddress";
-import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BoxAddressPerOrders from "../../src/app/components/BoxAddressPerOrders";
 
 type AddressItem = {
   id: string;
   address: string;
-  delivered: string;
+  delivered: boolean;
   _id: string;
 };
 const page = () => {
   const router = useRouter();
+  const previusPage = () => {
+    router.back();
+  };
   const { id } = router.query;
   const [isActive, setIsActive] = useState(false);
   const [historyDelivery, setHistoryDelivery] = useState([]);
@@ -38,28 +40,22 @@ const page = () => {
       });
   };
 
-  const date = {
-    deliveryMan_id: id,
-    delivered: true,
-  };
-  const datefalse = {
-    deliveryMan_id: id,
-    delivered: false,
-  };
+  const date = { params: { id: id, delivered: true } };
+  const datefalse = { params: { id: id, delivered: false } };
   useEffect(() => {
     axios
-      .post(`http://localhost:4000/api/v1/delivery/history`, date)
+      .get(`http://localhost:4000/api/v1/backoffice/dealersHistory`, date)
       .then((res) => {
-        setHistoryDelivery(res.data);
+        setHistoryDelivery(res.data.packages);
       })
       .catch((err) => {
         console.log(err);
       });
 
     axios
-      .post(`http://localhost:4000/api/v1/delivery/history`, datefalse)
+      .get(`http://localhost:4000/api/v1/backoffice/dealersHistory`, datefalse)
       .then((res) => {
-        setHistoryDeliveryinfalse(res.data);
+        setHistoryDeliveryinfalse(res.data.packages);
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +76,7 @@ const page = () => {
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
       <div className="profile-info rounded-2xl text-[#3D1DF3] bg-[#C7FFB1] ">
         <div className="h-16 flex items-center">
-          <Link href="/backoffice/manage_delivery">
+          <button onClick={previusPage}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -95,7 +91,7 @@ const page = () => {
                 d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-          </Link>
+          </button>
           <h1 className="m-4 font-black text-lg">Perfil del repartidor</h1>
         </div>
         <div className="rounded-2xl py-4 bg-white">
@@ -134,9 +130,9 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="delivery-history bg-white rounded-2xl text-[#3D1DF3] font-black mt-3 py-4 relative">
+      <div className="pending-delivery bg-white rounded-2xl text-[#3D1DF3] font-black mt-3 py-4 relative">
         <div className="flex justify-between">
-          <h2 className="ml-5">Historial de repartos</h2>
+          <h2 className="ml-5">Repartos pendientes</h2>
           <svg
             width="9"
             height="7"
@@ -157,7 +153,7 @@ const page = () => {
         <div className="mt-3 h-auto overflow-y-auto pb-2">
           {Array.isArray(historyDeliveryinfalse) &&
             historyDeliveryinfalse.map((item: AddressItem) => (
-              <BoxAddress
+              <BoxAddressPerOrders
                 key={item.id}
                 address={item.address}
                 status={item.delivered}
@@ -190,7 +186,7 @@ const page = () => {
         <div className="mt-3 h-auto overflow-y-auto pb-2">
           {Array.isArray(historyDelivery) &&
             historyDelivery.map((item: AddressItem) => (
-              <BoxAddress
+              <BoxAddressPerOrders
                 key={item.id}
                 address={item.address}
                 status={item.delivered}

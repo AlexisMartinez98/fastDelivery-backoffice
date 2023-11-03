@@ -166,6 +166,8 @@ const page = () => {
                         src={user.image}
                         alt={`User ${index}`}
                         className="rounded-full w-6 h-6"
+                        width={6}
+                        height={6}
                       />
                     ))}
                     {imageUsersCount > 0 && (
@@ -177,7 +179,7 @@ const page = () => {
                 </div>
               </div>
               <div className="flex items-end pb-3 ml-6">
-                <Link href="/backoffice/manage_delivery">
+                <Link href={`/manage_delivery/${formattedDate}`}>
                   <button className="bg-[#00EA77]  rounded-2xl w-16 h-9 ">
                     Ver
                   </button>
@@ -194,7 +196,7 @@ const page = () => {
               </h6>
             </div>
             <div className="flex items-end align-bottom pb-3 pt-10 ml-6">
-              <Link href="/backoffice/package_history">
+              <Link href={`/package_history/${formattedDate}`}>
                 <button className="bg-[#00EA77] rounded-2xl w-16 h-9 mb-1">
                   Ver
                 </button>
