@@ -26,10 +26,14 @@ const page = () => {
   const imageUsersCount = imageUser.length - maxImages;
 
   const date: Date = useSelector((state: RootState) => state.date.selectedDate);
-  const objDate = new Date(date);
-  const nombreMes = objDate.toLocaleString("es-ES", { month: "long" });
+  const objDate = new Date(date + "T00:00:00Z");
+  const nombreMes = objDate.toLocaleString("es-ES", {
+    month: "long",
+    timeZone: "UTC",
+  })
   const monthWithCapitalLetter =
     nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+
 
   const formattedDate = formatDate(selectDate);
   useEffect(() => {
