@@ -1,15 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BoxDeliveryManage from "../../components/BoxDeliveryManage";
+import BoxDeliveryManage from "../../src/app/components/BoxDeliveryManage";
 import BoxDate from "@/app/components/commons/boxDate";
 import Link from "next/link";
 import axios from "axios";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "@/app/state/store";
+import { useRouter } from "next/router";
 
 function ManageDelivery() {
-  const date: Date = useSelector((state: RootState) => state.date.selectedDate);
-
+  const router = useRouter();
+  const { date } = router.query;
   const objDate = new Date(date + "T00:00:00Z");
   const diaDelMes = objDate.getUTCDate();
   const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -18,11 +17,8 @@ function ManageDelivery() {
     month: "long",
     timeZone: "UTC",
   });
-
-  console.log("date", date);
-  console.log("nombreMes", nombreMes);
-  console.log("diaDelMes", diaDelMes);
-
+  const nombreMesCapitalized =
+    nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
   const [numPagina, setNumPagina] = useState(4);
   const handlerNumPagina = () => {
     if (arrayRepartidores.length - numPagina > 0) {
@@ -51,8 +47,6 @@ function ManageDelivery() {
         setArrayRepartidores(response.data.dealersInfo);
       });
   }, []);
-
-  console.log(arrayRepartidores);
   return (
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
       <div className="profile-info rounded-tl-[10px] rounded-tr-[10px] text-[#3D1DF3] bg-[#C7FFB1] pb-2">
@@ -79,7 +73,9 @@ function ManageDelivery() {
       </div>
       <div className=" bg-[#ffffff] rounded-xl relative top-[-6.5px]">
         <div className="h-[45px] w-[92%]  flex justify-between items-end border-b-2 mb-4 mx-auto  ">
-          <p className="- text-[#3D1DF3] font-semibold ">{nombreMes}</p>
+          <p className="- text-[#3D1DF3] font-semibold ">
+            {nombreMesCapitalized}
+          </p>
           <div className=" relative top-7">
             <BoxDate diaDelMes={diaDelMes} diaDeLaSemana={diaDeLaSemana} />
           </div>

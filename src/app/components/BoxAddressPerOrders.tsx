@@ -1,13 +1,17 @@
 import React from "react";
-interface BoxAddressProps {
+interface BoxAddressPerOrdersProps {
   address: string;
-  _id: string;
   status: boolean;
+  itemId: string;
 }
 
-const BoxAddress: React.FC<BoxAddressProps> = ({ address, _id,status }) => {
+const BoxAddressPerOrders: React.FC<BoxAddressPerOrdersProps> = ({
+  address,
+  status,
+  itemId,
+}) => {
   return (
-    <div className="flex pl-2 py-3 border-[#3D1DF3] border-[1.5px] rounded-2xl items-center my-3">
+    <div className="flex mx-5 py-3 border-[#3D1DF3] border-[1.5px] rounded-2xl items-center my-3">
       <svg
         width="40"
         height="40"
@@ -41,14 +45,14 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, _id,status }) => {
           x2="0.249998"
           y2="60"
           stroke="#3D1DF3"
-          strokeWidth="0.5"
-          strokeDasharray="1 1"
+          strokeWidth="0.5" // Cambia stroke-width a strokeWidth
+          strokeDasharray="1 1" // Cambia stroke-dasharray a strokeDasharray
         />
       </svg>
       <div className="flex flex-col items-start w-64">
         <div className="flex justify-between w-full ml-3 items-center">
-        <h3 className="font-semibold text-sm uppercase">
-            #{_id.slice(19, 24)}
+          <h3 className="font-semibold text-sm uppercase">
+            #{itemId.slice(19, 24)}
           </h3>
           <h4
             className={`rounded-2xl text-center px-2 text-sm ${
@@ -59,11 +63,14 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, _id,status }) => {
           </h4>
         </div>
         <div className="flex justify-between w-full ml-3 mt-1 items-center">
-          <p className="font-light text-sm mb-1">{address.split(",")[0]}</p>
+          <p className="font-light text-sm mb-1">
+            {address.split(",")[0]},<br></br>
+            {address.split(",")[1]}
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default BoxAddress;
+export default BoxAddressPerOrders;
