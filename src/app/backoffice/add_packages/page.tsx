@@ -7,15 +7,90 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const page = () => {
-  const [packageData, setPackageData] = useState({
-    direction: "",
-    name: "",
-    weight: "",
-  });
+  
   const [deadline, setDeadline] = useState("");
+  const [clickedCalendar,setClickedCalendar]=useState(false)
 
+  const handleClickCalendar=()=>{
+    setClickedCalendar(true)
+  }
+
+  const token = Cookies.get("token");
+  const singUpForm = useFormik({
+    initialValues: {
+      direction: "",
+      receiver: "",
+      weight: "",
+    
+    },
+  
+    validationSchema: Yup.object({
+      
+      direction: Yup.string()
+      .test('validar-direccion', 'Formato: Dirección, Localidad, Provincia', value => {
+        if (!value) return false; 
+        const parts = value.split(','); 
+        return parts.length === 3 && parts.every(part => part.trim() !== ''); 
+      })
+      .required('La dirección es requerida'),
+
+        receiver: Yup.string()
+        .min(2, "Nombre debe tener al menos 2 carácteres")
+        .required("Nombre es requerido"),
+        
+        weight: Yup.string()
+        .min(1, "Peso del paquete debe tener al menos 1 carácter")
+        .required("Peso del paquete es requerido"),
+        
+     
+    }),
+    
+  
+    onSubmit: (values) => {
+
+
+      if(!deadline){
+        setClickedCalendar(true)
+        return
+      }
+
+      axios
+        .post(
+          "http://localhost:4000/api/v1/backoffice/addPackages",
+          {
+            address:values.direction,
+            delivery_date: deadline,
+            receiver:values.receiver,
+            weight:values.weight,
+          },
+          {
+            headers: {
+              Authorization: token,
+            }}
+        )
+        .then((res) => {
+          toast.success(res.data.msg);
+          setDeadline("00/00/0000");
+          singUpForm.resetForm();
+        })
+  
+        .catch((error) => {
+          const captureError =
+            error.response.data
+         toast.error(captureError)
+         console.log(error)
+        });
+    },
+  });
+
+
+
+  //=============================================================>
+/*
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
@@ -53,6 +128,7 @@ const page = () => {
         );
       });
   };
+  */
 
   return (
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
@@ -78,45 +154,60 @@ const page = () => {
           <h1 className="m-4 font-black text-lg ">Agregar paquetes</h1>
         </div>
         <div className="rounded-2xl py-4 bg-white">
-          <form className="max-w-xl mx-auto p-4" onSubmit={handleSubmit}>
+          <form className="max-w-xl mx-auto p-4" onSubmit={singUpForm.handleSubmit}>
             <div className="px-3 mt-20">
               <input
                 type="text"
-                id="direccion"
-                name="direccion"
-                className="w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] border-[#3D1DF3] rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm"
+                id="direction"
+                name="direction"
+                className={`w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] ${singUpForm.touched.direction && singUpForm.errors.direction ?"border-[red]":"border-[#3D1DF3]"} rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm`}
                 placeholder="Dirección"
-                value={packageData.direction}
-                onChange={(e) =>
-                  setPackageData({ ...packageData, direction: e.target.value })
-                }
+                onChange={singUpForm.handleChange}
+                value={singUpForm.values.direction}
+                    onBlur={singUpForm.handleBlur}
               />
+
+{singUpForm.touched.direction && singUpForm.errors.direction && (
+                    <p style={{ color: "red", fontSize:"0.8rem"}}>
+                      {singUpForm.errors.direction}
+                    </p>
+                  ) }
             </div>
             <div className="px-3 my-3">
               <input
                 type="text"
-                id="direccion"
-                name="direccion"
-                className="w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] border-[#3D1DF3] rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm"
+                id="receiver"
+                name="receiver"
+                className={`w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] ${singUpForm.touched.receiver && singUpForm.errors.receiver ?"border-[red]":"border-[#3D1DF3]"} rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm`}
                 placeholder="Nombre de quien recibe"
-                value={packageData.name}
-                onChange={(e) =>
-                  setPackageData({ ...packageData, name: e.target.value })
-                }
+                onChange={singUpForm.handleChange}
+                value={singUpForm.values.receiver}
+                    onBlur={singUpForm.handleBlur}
               />
+
+{singUpForm.touched.receiver && singUpForm.errors.receiver && (
+                    <p style={{ color: "red", fontSize:"0.8rem"}}>
+                      {singUpForm.errors.receiver}
+                    </p>
+                  ) }
             </div>
             <div className="mb-4 px-3">
               <input
                 type="number"
-                id="direccion"
-                name="direccion"
-                className="w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] border-[#3D1DF3] rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm"
+                id="weight"
+                name="weight"
+                className={`w-full bg-white text-[#3D1DF3] placeholder-[#3D1DF3] border-[1px] ${singUpForm.touched.weight && singUpForm.errors.weight ?"border-[red]":"border-[#3D1DF3]"} rounded-xl pl-3 py-2 mt-1 focus:outline-none text-left text-sm`}
                 placeholder="Peso de paquete (Kg)"
-                value={packageData.weight}
-                onChange={(e) =>
-                  setPackageData({ ...packageData, weight: e.target.value })
-                }
+                onChange={singUpForm.handleChange}
+                value={singUpForm.values.weight}
+                    onBlur={singUpForm.handleBlur}
               />
+
+{singUpForm.touched.weight && singUpForm.errors.weight && (
+                    <p style={{ color: "red", fontSize:"0.8rem"}}>
+                      {singUpForm.errors.weight}
+                    </p>
+                  ) }
               <svg
                 width="270"
                 height="1"
@@ -143,7 +234,12 @@ const page = () => {
                 >
                   Fecha de Entrega
                 </label>
-                <Calendar deadline={deadline} setDeadline={setDeadline} />
+                <Calendar deadline={deadline} setDeadline={setDeadline} handleClickCalendar={handleClickCalendar} clickedCalendar={clickedCalendar} />
+                {!deadline && clickedCalendar  && (
+                    <p style={{ color: "red", fontSize:"0.8rem"}}>
+                      {"Campo requerido"}
+                    </p>
+                  ) }
               </div>
             </div>
 
