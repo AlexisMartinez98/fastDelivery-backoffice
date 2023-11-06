@@ -4,6 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 interface CalendarProps {
   deadline: string;
   setDeadline: (date: string) => void;
+  handleClickCalendar: () => void;
+  clickedCalendar:boolean
 }
 
 const Calendar: React.FC<CalendarProps> = (props) => {
@@ -31,8 +33,9 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   return (
-    <div className="flex items-center placeholder-[#3D1DF3] text-sm border rounded-xl px-3 py-2 mt-1 focus:outline-none border-[#3D1DF3]">
+    <div className={`flex items-center placeholder-[#3D1DF3] text-sm border rounded-xl px-3 py-2 mt-1 focus:outline-none ${!props.deadline && props.clickedCalendar ?"border-[red]":"border-[#3D1DF3]"}`} >
       <DatePicker
+        onBlur={props.handleClickCalendar}
         selected={selectedDate}
         onChange={handleDateChange}
         dateFormat="dd/MM/yyyy"
