@@ -3,7 +3,7 @@ import React from "react";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import Providers from "./state/providers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const tokenInCookie = Cookies.get("token");
-
   const router = useRouter();
+  const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (tokenInCookie) {
       axios
@@ -34,13 +34,30 @@ export default function RootLayout({
         })
         .then((response) => {
           toast.success(`Bienvenido de nuevo ${response.data.email}`);
-          router.push("/backoffice/manage_orders");
+          if (currentUrl !== window.location.href) {
+            router.push("/backoffice/manage_orders");
+          }
         })
         .catch((error) => {
           console.error("Error en la solicitud: ", error);
+          toast.error("Inicie sesión");
+          router.push("/");
         });
+    } else {
+      toast.error("Inicie sesión");
+      router.push("/");
     }
-  }, [tokenInCookie]);
+
+    const handleUrlChange = () => {
+      setCurrentUrl(window.location.href);
+    };
+
+    window.addEventListener("popstate", handleUrlChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleUrlChange);
+    };
+  }, [tokenInCookie, currentUrl, router]);
 
   return (
     <html lang="en">
