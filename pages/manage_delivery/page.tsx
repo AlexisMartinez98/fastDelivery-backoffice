@@ -46,7 +46,11 @@ function ManageDelivery() {
       .then((response) => {
         setArrayRepartidores(response.data.dealersInfo);
       });
-  }, []);
+  }, [date]);
+
+  
+
+
   return (
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">
       <div className="profile-info rounded-tl-[10px] rounded-tr-[10px] text-[#3D1DF3] bg-[#C7FFB1] pb-2">
