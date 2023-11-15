@@ -10,6 +10,7 @@ import { formatDate } from "@/app/utils/formatDate";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedDate } from "../../state/dateSlice";
 import { RootState } from "@/app/state/store";
+import { awsIP } from "../../../../awsIP";
 
 const page = () => {
   const dispatch = useDispatch();
@@ -30,16 +31,15 @@ const page = () => {
   const nombreMes = objDate.toLocaleString("es-ES", {
     month: "long",
     timeZone: "UTC",
-  })
+  });
   const monthWithCapitalLetter =
     nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
-
 
   const formattedDate = formatDate(selectDate);
   useEffect(() => {
     const packagesFetch = async () => {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/backoffice/packagesPerDay/${formattedDate}`
+        `${awsIP}/api/v1/backoffice/packagesPerDay/${formattedDate}`
       );
       const packagesData = response.data;
       const quantityPackagesDelivered = packagesData.allPackagesPerDay.length;
@@ -56,7 +56,7 @@ const page = () => {
     const userFetch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/v1/backoffice/getAllDeliveryManByDate/${formattedDate}`
+          `${awsIP}/api/v1/backoffice/getAllDeliveryManByDate/${formattedDate}`
         );
         const userActive = response.data;
         const actives = userActive.deliveryMen.filter(
@@ -74,7 +74,7 @@ const page = () => {
     const totalUsersFetch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${formattedDate}`
+          `${awsIP}/api/v1/backoffice/dealers?delivery_date=${formattedDate}`
         );
         setImageUser(response.data.dealersInfo);
 

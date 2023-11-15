@@ -11,6 +11,7 @@ import { loginSuccess } from "../state/actions";
 import Cookies from "js-cookie";
 import IconSVGon from "./IconSVGon";
 import IconSVGoff from "./IconSVGoff";
+import { awsIP } from "../../../awsIP";
 
 const page = () => {
   const dispatch = useDispatch();
@@ -32,13 +33,10 @@ const page = () => {
       toast.error("Todos los campos deben ser llenados");
     } else {
       try {
-        const response = await axios.post(
-          "http://localhost:4000/api/v1/user/login",
-          value
-        );
+        const response = await axios.post(`${awsIP}/api/v1/user/login`, value);
         Cookies.set("token", response.data.token);
         axios
-          .get("http://localhost:4000/api/v1/user/me", {
+          .get(`${awsIP}/api/v1/user/me`, {
             headers: {
               cookies: `${Cookies.get("token")}`,
             },

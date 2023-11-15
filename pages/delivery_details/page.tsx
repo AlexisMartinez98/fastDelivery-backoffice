@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BoxAddressPerOrders from "../../src/app/components/BoxAddressPerOrders";
+import { awsIP } from "../../awsIP";
 
 type AddressItem = {
   id: string;
@@ -29,7 +30,7 @@ const page = () => {
   const toggleSwitch = () => {
     setIsActive(!isActive);
     axios
-      .put(`http://localhost:4000/api/v1/backoffice/dealers/${id}`, {
+      .put(`${awsIP}/api/v1/backoffice/dealers/${id}`, {
         status: !isActive,
       })
       .then((res) => {
@@ -44,7 +45,7 @@ const page = () => {
   const datefalse = { params: { id: id, delivered: false } };
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/v1/backoffice/dealersHistory`, date)
+      .get(`${awsIP}/api/v1/backoffice/dealersHistory`, date)
       .then((res) => {
         setHistoryDelivery(res.data.packages);
       })
@@ -53,7 +54,7 @@ const page = () => {
       });
 
     axios
-      .get(`http://localhost:4000/api/v1/backoffice/dealersHistory`, datefalse)
+      .get(`${awsIP}/api/v1/backoffice/dealersHistory`, datefalse)
       .then((res) => {
         setHistoryDeliveryinfalse(res.data.packages);
       })
@@ -62,7 +63,7 @@ const page = () => {
       });
 
     axios
-      .get(`http://localhost:4000/api/v1/backoffice/dealers/${id}`)
+      .get(`${awsIP}/api/v1/backoffice/dealers/${id}`)
       .then((res) => {
         setDealer(res.data);
         setIsActive(res.data.user.status);

@@ -5,6 +5,7 @@ import Link from "next/link";
 import BoxAddress from "@/app/components/BoxAddress";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { awsIP } from "../../awsIP";
 
 type AddressItem = {
   _id: string;
@@ -16,7 +17,6 @@ const page = () => {
   const router = useRouter();
   const { date } = router.query;
 
-  
   const objDate = new Date(date + "T00:00:00Z");
   const diaDelMes = objDate.getUTCDate();
   const diasSemana = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -24,11 +24,11 @@ const page = () => {
   const nombreMes = objDate.toLocaleString("es-ES", {
     month: "long",
     timeZone: "UTC",
-  })
+  });
   const nombreMesCapitalized =
     nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
 
- /* if (typeof date === "string") {
+  /* if (typeof date === "string") {
     formattedDate = new Date(date);
     diaDelMes = formattedDate.getDate();
     const weekday = formattedDate.toLocaleString("default", {
@@ -50,7 +50,7 @@ const page = () => {
     const packages = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/v1/backoffice/packagesPerDay/${date}`
+          `${awsIP}/api/v1/backoffice/packagesPerDay/${date}`
         );
 
         setPackages(response.data.allPackagesPerDay);
@@ -87,7 +87,9 @@ const page = () => {
         <div className="  bg-[#ffffff] rounded-xl relative">
           <div className="mx-5 mt-0 h-[485px] overflow-y-auto relative">
             <div className="h-[45px] w-auto  flex justify-between items-end  mb-4 dotted-border ">
-              <p className=" text-[#3D1DF3] font-semibold ">{nombreMesCapitalized}</p>
+              <p className=" text-[#3D1DF3] font-semibold ">
+                {nombreMesCapitalized}
+              </p>
               <svg
                 width="270"
                 height="1"

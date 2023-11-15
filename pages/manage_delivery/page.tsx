@@ -5,6 +5,7 @@ import BoxDate from "@/app/components/commons/boxDate";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { awsIP } from "../../awsIP";
 
 function ManageDelivery() {
   const router = useRouter();
@@ -41,17 +42,12 @@ function ManageDelivery() {
   useEffect(() => {
     if (date) {
       axios
-        .get(
-          `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${date}`
-        )
+        .get(`${awsIP}/api/v1/backoffice/dealers?delivery_date=${date}`)
         .then((response) => {
           setArrayRepartidores(response.data.dealersInfo);
         });
     }
   }, [date]);
-
-  
-
 
   return (
     <main className="mr-6 ml-6 mt-4 mb-8 font-poppins">

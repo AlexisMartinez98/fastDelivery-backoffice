@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { awsIP } from "../../awsIP";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
   useEffect(() => {
     if (tokenInCookie) {
       axios
-        .get("http://localhost:4000/api/v1/user/me", {
+        .get(`${awsIP}/api/v1/user/me`, {
           headers: {
             cookies: `${tokenInCookie}`,
           },
