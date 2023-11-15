@@ -39,13 +39,15 @@ function ManageDelivery() {
   const [arrayRepartidores, setArrayRepartidores] = useState<Repartidor[]>([]);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${date}`
-      )
-      .then((response) => {
-        setArrayRepartidores(response.data.dealersInfo);
-      });
+    if (date) {
+      axios
+        .get(
+          `http://localhost:4000/api/v1/backoffice/dealers?delivery_date=${date}`
+        )
+        .then((response) => {
+          setArrayRepartidores(response.data.dealersInfo);
+        });
+    }
   }, [date]);
 
   
