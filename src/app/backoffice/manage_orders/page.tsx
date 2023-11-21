@@ -1,75 +1,104 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateCarousel from "../../components/Date";
-
 import PercentageCircle from "../../components/commons/PercentageCircle";
-import avatar1 from "../../assets/avatar1.jpeg";
-import avatar2 from "../../assets/avatar2.jpeg";
 import Image from "next/image";
 import avatar3 from "../../assets/avatar3.jpeg";
-import fakeDeliverys from "./fakeDeliverys.json";
 import Link from "next/link";
+import axios from "axios";
+import { formatDate } from "@/app/utils/formatDate";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedDate } from "../../state/dateSlice";
+import { RootState } from "@/app/state/store";
+import { awsIP } from "../../../../awsIP";
 
 const page = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const dispatch = useDispatch();
+  const [selectDate, setSelectDate] = useState(new Date());
+  const [quantityPackages, setQuantityPackages] = useState(Number);
+  const [packagesDelivered, setPackagesDelivered] = useState(Number);
+
+  const [quantityActives, setQuantityActives] = useState(Number);
+  const [totalDeliveries, setTotalDeliveries] = useState(Number);
+  // eslint-disable-next-line
+  const [imageUser, setImageUser] = useState<any[]>([]);
+  const maxImages = 2;
+  const usersToShow = imageUser.slice(0, maxImages);
+  const imageUsersCount = imageUser.length - maxImages;
+
+  const date: Date = useSelector((state: RootState) => state.date.selectedDate);
+  const objDate = new Date(date + "T00:00:00Z");
+  const nombreMes = objDate.toLocaleString("es-ES", {
+    month: "long",
+    timeZone: "UTC",
+  });
+  const monthWithCapitalLetter =
+    nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+
+  const formattedDate = formatDate(selectDate);
+  useEffect(() => {
+    const packagesFetch = async () => {
+      const response = await axios.get(
+        `${awsIP}/api/v1/backoffice/packagesPerDay/${formattedDate}`
+      );
+      const packagesData = response.data;
+      const quantityPackagesDelivered = packagesData.allPackagesPerDay.length;
+      const delivered = packagesData.allPackagesPerDay.filter(
+        // eslint-disable-next-line
+        (packages: any) => packages.delivered
+      );
+      const quantityDelivered = delivered.length;
+
+      setPackagesDelivered(quantityDelivered);
+      setQuantityPackages(quantityPackagesDelivered);
+    };
+
+    const userFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${awsIP}/api/v1/backoffice/getAllDeliveryManByDate/${formattedDate}`
+        );
+        const userActive = response.data;
+        const actives = userActive.deliveryMen.filter(
+          // eslint-disable-next-line
+          (active: any) => active.deliveries
+        );
+
+        const quantityActive = actives.length;
+
+        setQuantityActives(quantityActive);
+      } catch (error) {
+        console.error("error:", error);
+      }
+    };
+    const totalUsersFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${awsIP}/api/v1/backoffice/dealers?delivery_date=${formattedDate}`
+        );
+        setImageUser(response.data.dealersInfo);
+
+        const total = response.data.dealersInfo.length;
+        setTotalDeliveries(total);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    totalUsersFetch();
+    userFetch();
+    packagesFetch();
+    dispatch(setSelectedDate(formattedDate));
+  }, [selectDate]);
 
   const handleDateChange = (newDate: Date) => {
-    setSelectedDate(newDate);
-  };
-
-  const calculateRepartidoresActivos = () => {
-    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const fechaSeleccionada = fakeDeliverys.fechas.find(
-      (fecha) => fecha.fecha === selectedDateString
-    );
-    if (fechaSeleccionada) {
-      return fechaSeleccionada.repartidores.filter(
-        (repartidor) => repartidor.activo
-      ).length;
-    }
-    return 0;
-  };
-
-  const calculateTotalPaquetes = () => {
-    return 10 * calculateRepartidoresActivos();
-  };
-
-  const calculatePaquetesRepartidos = () => {
-    const selectedDateString = selectedDate.toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const fechaSeleccionada = fakeDeliverys.fechas.find(
-      (fecha) => fecha.fecha === selectedDateString
-    );
-
-    if (fechaSeleccionada) {
-      const paquetesRepartidos = fechaSeleccionada.repartidores.reduce(
-        (total, repartidor) => {
-          return (
-            total +
-            repartidor.paquetes.filter((paquete) => paquete.entregado).length
-          );
-        },
-        0
-      );
-
-      return paquetesRepartidos;
-    }
-
-    return 0;
+    setSelectDate(newDate);
   };
 
   const PercentageRepartidoresValue = () => {
-    return (calculateRepartidoresActivos() / 10) * 100;
+    return (quantityActives / totalDeliveries) * 100;
   };
   const PercentajePaquetesValue = () => {
-    return (calculatePaquetesRepartidos() / calculateTotalPaquetes()) * 100;
+    return (packagesDelivered / quantityPackages) * 100;
   };
 
   return (
@@ -78,32 +107,35 @@ const page = () => {
         <h1 className="m-5 font-bold text-lg ">Gestionar Pedidos</h1>
       </div>
       <div className="rounded-2xl mb-5 pb-6 bg-white  ">
-        <div className="flex items-center mb-4">
-          <div className="w-16 h-16 ml-5 mt-4 mb-4 rounded-full bg-blue-500 flex items-center justify-center">
+        <div className="flex items-center">
+          <div className="w-16 h-16 ml-5 mt-4 rounded-full bg-blue-500 flex items-center justify-center">
             <Image
               src={avatar3}
               className="rounded-full w-16 h-16 "
               alt="avatar3"
             ></Image>
           </div>
-          <div className="ml-4 mt-2">
+          <div className="ml-4">
             <h3 className="text-xl font-semibold">¡Hola Admin!</h3>
             <h5 className=" text-base">Estos son los pedidos del día</h5>
           </div>
         </div>
-        <div>
+        <div className="border-[1px] border-[#3D1DF3] rounded-xl mx-5 my-3 py-2">
+          <div>
+            <h4 className="dotted-border text-[#3D1DF3] font-semibold ml-2 mb-1">
+              {monthWithCapitalLetter}
+            </h4>
+          </div>
           <DateCarousel
-            selectedDate={selectedDate}
+            selectedDate={selectDate}
             onDateChange={handleDateChange}
           />
         </div>
-        <div className="p-3 mt-4 rounded-xl  border-[#3D1DF3] border-[1px] ml-5 mr-5 ">
+        <div className="p-3  rounded-xl  border-[#3D1DF3] border-[1px] ml-5 mr-5 ">
           <div className="dotted-border flex justify-between  ">
             <h4 className="font-bold">Detalles</h4>
             <div className="flex items-center">
-              <h4 className="mr-2">
-                {selectedDate.toLocaleDateString("es-ES")}
-              </h4>
+              <h4 className="mr-2">{selectDate.toLocaleDateString("es-ES")}</h4>
               <svg
                 className="items-center"
                 width="11"
@@ -120,48 +152,68 @@ const page = () => {
             </div>
           </div>
           <div className="dotted-border">
-            <div className="relative flex items-center justify-start ml-3 mt-8 ">
-              <PercentageCircle value={PercentageRepartidoresValue()} />
+            <div className="relative flex justify-start mb-3 mt-3">
+              <PercentageCircle
+                value={PercentageRepartidoresValue()}
+                aria-label="Porcentaje de repartidores activos"
+              />
               <div className="ml-5 ">
                 <h4 className="font-bold text-base">Repartidores</h4>
-                <h6 className="text-sm">{`${calculateRepartidoresActivos()}/10 activos`}</h6>
+                <h6 className="text-sm">
+                  {quantityActives}/{totalDeliveries} Habilitados
+                </h6>
+                <div className="flex justify-content mt-1 mb-4 ">
+                  <div className="flex">
+                    {usersToShow.map((user, index) => (
+                      <Image
+                        key={index}
+                        src={user.image}
+                        alt={`User ${index}`}
+                        className="rounded-full w-6 h-6"
+                        width={6}
+                        height={6}
+                      />
+                    ))}
+                    {imageUsersCount > 0 && (
+                      <div className="rounded-full w-8 h-8 bg-blue-500 text-white flex items-center justify-center">
+                        +{imageUsersCount}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-end pb-3 ml-6">
+                <Link href={`/manage_delivery/${formattedDate}`}>
+                  <button className="bg-[#00EA77]  rounded-2xl w-16 h-9 ">
+                    Ver
+                  </button>
+                </Link>
               </div>
             </div>
-            <div className="flex justify-between mt-5">
-              <div className="flex ml-3 mb-7 ">
-                <Image
-                  src={avatar1}
-                  className="rounded-full w-8 h-8 "
-                  alt="avatar1"
-                />
-                <Image
-                  src={avatar2}
-                  className="rounded-full w-8 h-8"
-                  alt="avatar2"
-                />
-              </div>
-              <Link href="/backoffice/manage_delivery">
-                <button className="bg-[#00EA77] rounded-2xl w-16 h-9 ">
+          </div>
+          <div className="relative flex  justify-start  mt-3 ">
+            <PercentageCircle value={PercentajePaquetesValue()} />
+            <div className="ml-5">
+              <h4 className="font-bold text-base">Paquetes</h4>
+              <h6 className="text-sm">
+                {packagesDelivered}/{quantityPackages} Repartidos
+              </h6>
+            </div>
+            <div className="flex items-end align-bottom pb-3 pt-10 ml-6">
+              <Link href={`/package_history/${formattedDate}`}>
+                <button className="bg-[#00EA77] rounded-2xl w-16 h-9 mb-1">
                   Ver
                 </button>
               </Link>
             </div>
           </div>
-
-          <div className="relative flex items-center justify-start ml-3 mt-8 ">
-            <PercentageCircle value={PercentajePaquetesValue()} />
-            <div className="ml-5">
-              <h4 className="font-bold text-base">Paquetes</h4>
-              <h6 className="text-sm">{`${calculatePaquetesRepartidos()}/ ${calculateTotalPaquetes()} repartidos`}</h6>
-            </div>
-          </div>
-          <div className="flex justify-end mt-5 ">
-            <Link href="/backoffice/package_history">
-              <button className="bg-[#00EA77] rounded-2xl w-16 h-9 mb-1">
-                Ver
-              </button>
-            </Link>
-          </div>
+        </div>
+        <div className="ml-5 mr-5 mt-5">
+          <Link href="/backoffice/add_packages">
+            <button className="bg-[#00EA77] text-[#3D1DF3] rounded-2xl w-[100%] h-10 mb-1">
+              Nuevo paquete +
+            </button>
+          </Link>
         </div>
       </div>
     </div>

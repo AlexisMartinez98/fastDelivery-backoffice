@@ -1,14 +1,13 @@
-"use client";
 import React from "react";
 interface BoxAddressProps {
   address: string;
-  status: string;
-  itemId: string;
+  _id: string;
+  status: boolean;
 }
 
-const BoxAddress: React.FC<BoxAddressProps> = ({ address, status, itemId }) => {
+const BoxAddress: React.FC<BoxAddressProps> = ({ address, _id,status }) => {
   return (
-    <div className="flex mx-5 py-3 border-[#3D1DF3] border-[1.5px] rounded-2xl items-center my-3">
+    <div className="flex pl-2 py-3 border-[#3D1DF3] border-[1.5px] rounded-2xl items-center my-3">
       <svg
         width="40"
         height="40"
@@ -42,56 +41,25 @@ const BoxAddress: React.FC<BoxAddressProps> = ({ address, status, itemId }) => {
           x2="0.249998"
           y2="60"
           stroke="#3D1DF3"
-          strokeWidth="0.5" // Cambia stroke-width a strokeWidth
-          strokeDasharray="1 1" // Cambia stroke-dasharray a strokeDasharray
+          strokeWidth="0.5"
+          strokeDasharray="1 1"
         />
       </svg>
       <div className="flex flex-col items-start w-64">
         <div className="flex justify-between w-full ml-3 items-center">
-          <h3 className="font-semibold text-sm uppercase">#{itemId}</h3>
-          <h4 className="text-[12px] bg-[#C7FFB1] rounded-2xl text-center px-2">
-            {status}
+        <h3 className="font-semibold text-sm uppercase">
+            #{_id.slice(19, 24)}
+          </h3>
+          <h4
+            className={`rounded-2xl text-center px-2 text-sm ${
+              !status ? "bg-[#F8E169]" : "bg-[#C7FFB1]"
+            }`}
+          >
+            {!status ? "Pendiente" : "Entregado"}
           </h4>
         </div>
         <div className="flex justify-between w-full ml-3 mt-1 items-center">
-          <p className="font-light text-sm mb-1">
-            {address.split(",")[0]},<br></br>
-            {address.split(",")[1]}
-          </p>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="mr-3"
-          >
-            <path
-              d="M8.11377 4.66671C8.38833 3.88991 9.12915 3.33337 9.99997 3.33337C10.8708 3.33337 11.6116 3.88991 11.8862 4.66671"
-              stroke="#FF062E"
-              strokeLinecap="round"
-            />
-            <path
-              d="M15.6667 6H4.33328"
-              stroke="#FF062E"
-              strokeLinecap="round"
-            />
-            <path
-              d="M14.5556 7.66663L14.2489 12.266C14.1309 14.036 14.0719 14.9209 13.4953 15.4605C12.9186 16 12.0317 16 10.2578 16H9.74223C7.96836 16 7.08142 16 6.50475 15.4605C5.92808 14.9209 5.86908 14.036 5.75109 12.266L5.44446 7.66663"
-              stroke="#FF062E"
-              strokeLinecap="round"
-            />
-            <path
-              d="M8.33334 9.33337L8.66668 12.6667"
-              stroke="#FF062E"
-              strokeLinecap="round"
-            />
-            <path
-              d="M11.6667 9.33337L11.3333 12.6667"
-              stroke="#FF062E"
-              strokeLinecap="round"
-            />
-          </svg>
+          <p className="font-light text-sm mb-1">{address.split(",")[0]}</p>
         </div>
       </div>
     </div>

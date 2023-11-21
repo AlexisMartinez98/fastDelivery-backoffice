@@ -42,16 +42,23 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
   useEffect(() => {
     generateDates();
   }, [currentDate]);
+  const dayEnabled = (date: Date) => {
+    const today = new Date();
+    return date <= today;
+  };
 
   return (
-    <div className="rounded-md  ">
-      <div className="grid grid-cols-7 gap-2 rounded-xl ">
-        <button onClick={prevDay} className="text-[#3D1DF3] ml-6 font-bold">
+    <div className="rounded-md mt-2 mb-1">
+      <div className="flex  rounded-xl ">
+        <button
+          aria-label="prev Day"
+          onClick={prevDay}
+          className="text-[#3D1DF3] ml-2  font-bold"
+        >
           <svg
-            width="19"
-            height="15"
+            width="17"
+            height="13"
             viewBox="0 0 17 13"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -67,29 +74,40 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
 
         {dates.map((date, index) => (
           <button
+            aria-label="select Day"
             key={index}
             className={`${
               date.toDateString() === selectedDate.toDateString()
                 ? "bg-[#C7FFB1] "
                 : "bg-gray-100"
-            } p-2 rounded-xl text-center w-12 h-16 border-[1px] border-[#3D1DF3]`}
+            } p-2 mx-[2px]  rounded-xl text-bond text-center w-12 h-15 border-[1px] border-[#3D1DF3] ${
+              !dayEnabled(date)
+                ? "bg-[#62626233] border-none text-[#626262] "
+                : ""
+            }`}
             onClick={() => handleDateClick(date)}
+            disabled={!dayEnabled(date)}
           >
-            <div className="text-xs font-semibold">
+            <div className=" text-sm font-bold">
               {date.toLocaleDateString("es-ES", { weekday: "short" })}
             </div>
-            <div className="text-lg font-bold">
+            <div className=" text-xl font-bold">
               {date.toLocaleDateString("es-ES", { day: "numeric" })}
             </div>
           </button>
         ))}
-        <button onClick={nextDay} className=" ml-2 font-bold text-[#3D1DF3]">
+        <button
+          aria-label="next day"
+          onClick={nextDay}
+          className=" ml-2 font-bold text-[#3D1DF3]"
+        >
           <svg
             width="19"
             height="15"
             viewBox="0 0 16 13"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            aria-label="arrow"
           >
             <path
               d="M15.0791 5.73201C15.5585 6.13179 15.5585 6.86821 15.0791 7.26799L10.8905 10.7611C10.2392 11.3042 9.25 10.8411 9.25 9.99311L9.25 3.00689C9.25 2.15888 10.2392 1.69578 10.8905 2.2389L15.0791 5.73201Z"
